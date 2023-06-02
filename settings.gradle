@@ -1,0 +1,6 @@
+rootProject.name = 'fretando'
+
+include("common")
+
+include("client")
+include("server")
