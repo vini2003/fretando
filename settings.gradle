@@ -1,3 +1,20 @@
+pluginManagement {
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+
+        maven {
+            url = 'https://maven.pkg.jetbrains.space/public/p/compose/dev'
+        }
+    }
+
+    plugins {
+        id 'org.jetbrains.kotlin.multiplatform' version kotlinVersion
+        id 'org.jetbrains.compose' version composeVersion
+    }
+}
+
 rootProject.name = 'fretando'
 
 include("common")

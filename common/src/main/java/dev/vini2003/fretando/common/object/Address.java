@@ -8,33 +8,43 @@ import java.util.UUID;
 
 public class Address extends AbstractObject implements Serializable {
     private String street;
+    private String number;
     private String city;
     private String state;
     private String postalCode;
     private String country;
+    private String extras;
 
     public Address() {
     }
 
-    public Address(String street, String city, String state, String postalCode, String country) {
+    public Address(String street, String number, String city, String state, String postalCode, String country, String extras) {
         this.street = street;
+        this.number = number;
         this.city = city;
         this.state = state;
         this.postalCode = postalCode;
         this.country = country;
+        this.extras = extras;
     }
 
-    public Address(UUID uuid, String street, String city, String state, String postalCode, String country) {
+    public Address(UUID uuid, String street, String number, String city, String state, String postalCode, String country, String extras) {
         super(uuid);
         this.street = street;
+        this.number = number;
         this.city = city;
         this.state = state;
         this.postalCode = postalCode;
         this.country = country;
+        this.extras = extras;
     }
 
     public String getStreet() {
         return street;
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     public String getCity() {
@@ -55,6 +65,10 @@ public class Address extends AbstractObject implements Serializable {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public void setCity(String city) {
@@ -81,6 +95,7 @@ public class Address extends AbstractObject implements Serializable {
         Address address = (Address) o;
 
         if (!Objects.equals(street, address.street)) return false;
+        if (!Objects.equals(number, address.number)) return false;
         if (!Objects.equals(city, address.city)) return false;
         if (!Objects.equals(state, address.state)) return false;
         if (!Objects.equals(postalCode, address.postalCode)) return false;
@@ -90,6 +105,7 @@ public class Address extends AbstractObject implements Serializable {
     @Override
     public int hashCode() {
         int result = street != null ? street.hashCode() : 0;
+        result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
@@ -99,6 +115,6 @@ public class Address extends AbstractObject implements Serializable {
 
     @Override
     public String toString() {
-        return street + ", " + city + ", " + state + " " + postalCode + ", " + country;
+        return street + ", " + number + ", " + city + ", " + state + " " + postalCode + ", " + country;
     }
 }

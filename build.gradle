@@ -8,39 +8,37 @@ allprojects {
     group = 'dev.vini2003'
     version = '1.0-SNAPSHOT'
 
-    sourceCompatibility = '20'
-    targetCompatibility = '20'
+    sourceCompatibility = '11'
+    targetCompatibility = '11'
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        implementation 'org.jetbrains:annotations:23.0.0'
+        implementation("org.jetbrains:annotations:${jetbrainsAnnotationsVersion}")
 
-        testImplementation 'com.github.javafaker:javafaker:1.0.2'
+        implementation("com.github.javafaker:javafaker:${javaFakerVersion}")
 
-        testImplementation platform('org.junit:junit-bom:5.9.1')
-        testImplementation 'org.junit.jupiter:junit-jupiter-api'
+        testImplementation(platform("org.junit:junit-bom:${junitBomVersion}"))
+        testImplementation("org.junit.jupiter:junit-jupiter-api")
 
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     }
 
     compileJava {
-        options.compilerArgs += ["--enable-preview"]
         options.fork = true
         options.forkOptions.javaHome = file("${System.properties['java.home']}")
     }
 
     compileTestJava {
-        options.compilerArgs += ["--enable-preview"]
         options.fork = true
         options.forkOptions.javaHome = file("${System.properties['java.home']}")
     }
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(20) // Change this to the version you are using.
+            languageVersion = JavaLanguageVersion.of(11)
         }
     }
 
