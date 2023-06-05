@@ -1,10 +1,14 @@
 package ui.compose
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import dev.vini2003.fretando.common.`object`.Request
+import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.common.`object`.faker.FakeDataGenerator
+import ui.theme.paddings
 
 @Composable
 fun RequestCardList() {
@@ -13,8 +17,11 @@ fun RequestCardList() {
         FakeDataGenerator.createFakeRequest()
     }
 
-    // Use LazyColumn to display the list
-    LazyColumn {
+    // Use LazyVerticalGrid to display the list
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 320.dp),
+        contentPadding = PaddingValues(MaterialTheme.paddings.medium)
+    ) {
         items(requestList) { request ->
             RequestCard(request = request)
         }

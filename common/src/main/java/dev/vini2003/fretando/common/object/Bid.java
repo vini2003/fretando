@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public class Bid extends AbstractObject implements Serializable {
     private Request request;
-
     private Currency currency;
     private double currencyAmount;
 

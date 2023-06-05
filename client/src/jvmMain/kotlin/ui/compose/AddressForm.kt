@@ -22,6 +22,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import ui.theme.paddings
+import ui.theme.sizes
 import util.misc.Countries
 
 @ExperimentalComposeUiApi
@@ -47,6 +49,8 @@ fun AddressForm(label: String = "Address") {
     var country by remember { mutableStateOf("") }
     var countryError by remember { mutableStateOf<String?>(null) }
 
+    val sortedCountries = remember { Countries }
+
     val notes = remember { mutableStateOf("") }
 
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
@@ -61,15 +65,19 @@ fun AddressForm(label: String = "Address") {
     Column {
         Text(
             label,
-            fontSize = 18.sp,
+            fontSize = MaterialTheme.typography.h5.fontSize,
             color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(MaterialTheme.paddings.small)
         )
-        Divider(color = Color.LightGray, thickness = 1.dp, modifier = Modifier.padding(horizontal = 8.dp))
+
+        Divider(
+            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+            thickness = 1.dp,
+            modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
+        )
 
         Column(
-            modifier = Modifier
-                .padding(8.dp)
+            modifier = Modifier.padding(MaterialTheme.paddings.small)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 CustomTextField(
@@ -77,7 +85,7 @@ fun AddressForm(label: String = "Address") {
                     error = streetError,
                     label = "Street",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(440.dp)
                         .focusRequester(focusRequesters[0]),
                     nextFocusRequester = focusRequesters[1]
@@ -87,20 +95,23 @@ fun AddressForm(label: String = "Address") {
                     error = numberError,
                     label = "Number",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(120.dp)
                         .focusRequester(focusRequesters[1]),
                     nextFocusRequester = focusRequesters[2]
                 )
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.small)
+            ) {
                 CustomTextField(
                     value = city,
                     error = cityError,
                     label = "City",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(380.dp)
                         .focusRequester(focusRequesters[2]),
                     nextFocusRequester = focusRequesters[3]
@@ -111,20 +122,23 @@ fun AddressForm(label: String = "Address") {
                     error = stateError,
                     label = "State",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(180.dp)
                         .focusRequester(focusRequesters[3]),
                     nextFocusRequester = focusRequesters[4]
                 )
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.small)
+            ) {
                 CustomTextField(
                     value = postalCode,
                     error = postalCodeError,
                     label = "Postal Code",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(278.dp)
                         .focusRequester(focusRequesters[4]),
                     nextFocusRequester = focusRequesters[5]
