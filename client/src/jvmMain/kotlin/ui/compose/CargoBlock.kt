@@ -14,12 +14,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import dev.vini2003.fretando.common.`object`.Cargo
+import dev.vini2003.fretando.server.entity.Cargo
 import ui.theme.paddings
 import ui.theme.spacers
 
 @Composable
-fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
+fun CargoBlock(cargo: dev.vini2003.fretando.server.entity.Cargo, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surfaceVariant)

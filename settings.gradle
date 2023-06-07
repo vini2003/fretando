@@ -12,6 +12,9 @@ pluginManagement {
     plugins {
         id 'org.jetbrains.kotlin.multiplatform' version kotlinVersion
         id 'org.jetbrains.compose' version composeVersion
+        id 'org.springframework.boot' version springBootVersion
+        id 'io.spring.dependency-management' version springDependencyManagementVersion
+        id 'java'
     }
 }
 

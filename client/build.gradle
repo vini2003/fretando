@@ -1,17 +1,22 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
-//file:noinspection VulnerableLibrariesLocal
 plugins {
-    id 'java' apply true
-    id 'org.jetbrains.kotlin.multiplatform' apply true
-    id 'org.jetbrains.compose' apply true
+    id "java" apply true
+    id "org.jetbrains.kotlin.multiplatform" apply true
+    id "org.jetbrains.compose" apply true
 }
+
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
     google()
+
     mavenCentral()
+
     maven {
-        url = 'https://maven.pkg.jetbrains.space/public/p/compose/dev'
+        name = "JetBrains Compose"
+        url = "https://maven.pkg.jetbrains.space/public/p/compose/dev"
     }
 }
 
@@ -23,11 +28,11 @@ kotlin {
     sourceSets {
         jvmMain {
             dependencies {
-                implementation(project(':common'))
+                implementation(project(":common"))
 
                 implementation(compose.desktop.currentOs) {
-                    exclude group: 'com.google.android.material', module: 'material'
-                    exclude group: 'org.jetbrains.compose.material', module: 'material-desktop'
+                    exclude group: "com.google.android.material", module: "material"
+                    exclude group: "org.jetbrains.compose.material", module: "material-desktop"
                 }
 
                 implementation("org.jetbrains.compose.material:material-icons-extended:${composeVersion}")
@@ -44,7 +49,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats = [TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb]
-            packageName = "fretando-jetpack-compose"
+            packageName = "fretando"
             packageVersion = "1.0.0"
         }
     }
