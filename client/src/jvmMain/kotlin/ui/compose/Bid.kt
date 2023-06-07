@@ -28,12 +28,10 @@ fun Bid() {
     ) {
         Text("Bid", fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
 
-        Currency()
-
         OutlinedTextField(
             value = currencyAmount,
             onValueChange = { currencyAmount = it },
-            label = { Text("Currency Amount") },
+            label = { Text("Amount") },
             modifier = Modifier.defaultMinSize(minHeight = 12.dp)
                 .width(568.dp),
         )

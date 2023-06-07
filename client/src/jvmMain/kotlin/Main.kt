@@ -6,15 +6,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Pages
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.RequestPage
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +25,6 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import ui.compose.RequestCardList
-import ui.compose.ShowRequestFormPopup
 import ui.theme.AppTheme
 import ui.theme.paddings
 import ui.theme.spacers
@@ -80,11 +79,11 @@ fun SidebarContent() {
     Column {
         SidebarContentItem(0, Icons.Default.Person, "My Profile") { /* doSomething() */ }
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
-        SidebarContentItem(1, Icons.Default.List, "Requests") { /* doSomething() */ }
-        SidebarContentItem(2, Icons.Default.List, "Offers") { /* doSomething() */ }
+        SidebarContentItem(3, Icons.Default.Pages, "My Requests") { /* doSomething() */ }
+        SidebarContentItem(4, Icons.Default.RequestPage, "My Offers") { /* doSomething() */ }
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
-        SidebarContentItem(3, Icons.Default.List, "My Requests") { /* doSomething() */ }
-        SidebarContentItem(4, Icons.Default.List, "My Offers") { /* doSomething() */ }
+        SidebarContentItem(1, Icons.Default.Pages, "Requests") { /* doSomething() */ }
+        SidebarContentItem(2, Icons.Default.RequestPage, "Offers") { /* doSomething() */ }
     }
 }
 
@@ -93,7 +92,7 @@ fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: ()
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .height(54.dp)
+            .height(64.dp)
             .fillMaxWidth()
             .padding(MaterialTheme.paddings.verySmall)
             .clip(MaterialTheme.shapes.large)
@@ -124,6 +123,10 @@ fun MainContent() {
     // Your main app content here...
     Column {
         RequestCardList()
+        // AddressCard(FakeDataGenerator.createFakeAddress())
+        // BidCard(FakeDataGenerator.createFakeBid(UUID.randomUUID()))
+        // CargoCard(FakeDataGenerator.createFakeCargo())
+        // RequestCard(FakeDataGenerator.createFakeRequest())
 
         //    ShowRequestFormPopup()
     }

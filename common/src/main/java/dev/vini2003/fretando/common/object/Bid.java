@@ -8,49 +8,38 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Bid extends AbstractObject implements Serializable {
-    private Request request;
-    private Currency currency;
-    private double currencyAmount;
+    private UUID requestId;
+    private double amount;
 
     public Bid() {
 
     }
 
-    public Bid(Request request, Currency currency, double currencyAmount) {
-        this.request = request;
-        this.currency = currency;
-        this.currencyAmount = currencyAmount;
+    public Bid(UUID requestId, Currency currency, double amount) {
+        this.requestId = requestId;
+        this.amount = amount;
     }
 
-    public Bid(UUID uuid, Request request, Currency currency, double currencyAmount) {
+    public Bid(UUID uuid, UUID requestId, Currency currency, double amount) {
         super(uuid);
-        this.request = request;
-        this.currency = currency;
-        this.currencyAmount = currencyAmount;
+        this.requestId = requestId;
+        this.amount = amount;
     }
 
-    public Request getRequest() {
-        return request;
+    public UUID getRequestId() {
+        return requestId;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public double getAmount() {
+        return amount;
     }
 
-    public double getCurrencyAmount() {
-        return currencyAmount;
+    public void setRequestId(UUID requestId) {
+        this.requestId = requestId;
     }
 
-    public void setRequest(Request request) {
-        this.request = request;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
-    public void setCurrencyAmount(double currencyAmount) {
-        this.currencyAmount = currencyAmount;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     @Override
@@ -60,24 +49,22 @@ public class Bid extends AbstractObject implements Serializable {
 
         Bid bid = (Bid) o;
 
-        if (Double.compare(bid.currencyAmount, currencyAmount) != 0) return false;
-        if (!Objects.equals(request, bid.request)) return false;
-        return Objects.equals(currency, bid.currency);
+        if (Double.compare(bid.amount, amount) != 0) return false;
+        return Objects.equals(requestId, bid.requestId);
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        result = request != null ? request.hashCode() : 0;
-        result = 31 * result + (currency != null ? currency.hashCode() : 0);
-        temp = Double.doubleToLongBits(currencyAmount);
+        result = requestId != null ? requestId.hashCode() : 0;
+        temp = Double.doubleToLongBits(amount);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
     @Override
     public String toString() {
-        return request + " " + currency + " " + currencyAmount;
+        return " " + requestId + " " + amount;
     }
 }

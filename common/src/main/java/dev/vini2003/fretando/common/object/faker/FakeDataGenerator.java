@@ -6,10 +6,7 @@ import dev.vini2003.fretando.common.object.Bid;
 import dev.vini2003.fretando.common.object.Cargo;
 import dev.vini2003.fretando.common.object.Request;
 
-import java.util.ArrayList;
-import java.util.Currency;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,7 +26,7 @@ public class FakeDataGenerator {
         );
     }
 
-    public static Bid createFakeBid(Request request) {
+    public static Bid createFakeBid(UUID request) {
         return new Bid(
                 request,
                 Currency.getInstance(faker.currency().code()),
@@ -40,9 +37,13 @@ public class FakeDataGenerator {
     public static Cargo createFakeCargo() {
         return new Cargo(
                 faker.number().randomDouble(2, 1, 100),
+                Cargo.LengthUnit.METERS,
                 faker.number().randomDouble(2, 1, 100),
+                Cargo.LengthUnit.METERS,
                 faker.number().randomDouble(2, 1, 100),
+                Cargo.LengthUnit.METERS,
                 faker.number().randomDouble(2, 1, 100),
+                Cargo.WeightUnit.KILOGRAMS,
                 faker.lorem().sentence()
         );
     }
@@ -57,10 +58,9 @@ public class FakeDataGenerator {
                 .collect(Collectors.toList());
 
         Request request = new Request(origin, destination, cargo);
+        request.setBids(bids);
 
-        // Now we can set the Request in each Bid
-        bids.forEach(bid -> bid.setRequest(request));
-        request.getBids().addAll(bids);
+        // Now we can set the Request in each Bi
 
         return request;
     }

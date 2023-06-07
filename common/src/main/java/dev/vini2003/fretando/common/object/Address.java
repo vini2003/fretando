@@ -13,22 +13,22 @@ public class Address extends AbstractObject implements Serializable {
     private String state;
     private String postalCode;
     private String country;
-    private String extras;
+    private String notes;
 
     public Address() {
     }
 
-    public Address(String street, String number, String city, String state, String postalCode, String country, String extras) {
+    public Address(String street, String number, String city, String state, String postalCode, String country, String notes) {
         this.street = street;
         this.number = number;
         this.city = city;
         this.state = state;
         this.postalCode = postalCode;
         this.country = country;
-        this.extras = extras;
+        this.notes = notes;
     }
 
-    public Address(UUID uuid, String street, String number, String city, String state, String postalCode, String country, String extras) {
+    public Address(UUID uuid, String street, String number, String city, String state, String postalCode, String country, String notes) {
         super(uuid);
         this.street = street;
         this.number = number;
@@ -36,7 +36,7 @@ public class Address extends AbstractObject implements Serializable {
         this.state = state;
         this.postalCode = postalCode;
         this.country = country;
-        this.extras = extras;
+        this.notes = notes;
     }
 
     public String getStreet() {
@@ -99,7 +99,8 @@ public class Address extends AbstractObject implements Serializable {
         if (!Objects.equals(city, address.city)) return false;
         if (!Objects.equals(state, address.state)) return false;
         if (!Objects.equals(postalCode, address.postalCode)) return false;
-        return Objects.equals(country, address.country);
+        if (!Objects.equals(country, address.country)) return false;
+        return Objects.equals(notes, address.notes);
     }
 
     @Override
@@ -110,11 +111,12 @@ public class Address extends AbstractObject implements Serializable {
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
         result = 31 * result + (country != null ? country.hashCode() : 0);
+        result = 31 * result + (notes != null ? notes.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return street + ", " + number + ", " + city + ", " + state + " " + postalCode + ", " + country;
+        return street + ", " + number + ", " + city + ", " + state + " " + postalCode + ", " + country + " - " + notes;
     }
 }
