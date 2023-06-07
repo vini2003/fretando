@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package ui.compose
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -7,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -24,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import ui.theme.paddings
 import ui.theme.sizes
+import ui.theme.spacers
 import util.misc.Countries
 
 @ExperimentalComposeUiApi
@@ -49,8 +54,6 @@ fun AddressForm(label: String = "Address") {
     var country by remember { mutableStateOf("") }
     var countryError by remember { mutableStateOf<String?>(null) }
 
-    val sortedCountries = remember { Countries }
-
     val notes = remember { mutableStateOf("") }
 
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
@@ -62,16 +65,16 @@ fun AddressForm(label: String = "Address") {
     else
         Icons.Filled.KeyboardArrowDown
 
-    Column {
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
         Text(
             label,
-            fontSize = MaterialTheme.typography.h5.fontSize,
-            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+            fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F), // TODO: Check this!
             modifier = Modifier.padding(MaterialTheme.paddings.small)
         )
 
         Divider(
-            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.0F), // TODO: Check this!
             thickness = 1.dp,
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )
@@ -79,7 +82,7 @@ fun AddressForm(label: String = "Address") {
         Column(
             modifier = Modifier.padding(MaterialTheme.paddings.small)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacers.small)) {
                 CustomTextField(
                     value = street,
                     error = streetError,
@@ -150,7 +153,7 @@ fun AddressForm(label: String = "Address") {
                         onValueChange = { country = it; dropdownMenuExpanded = true },
                         isError = countryError != null,
                         modifier = Modifier
-                            .defaultMinSize(minHeight = 16.dp)
+                            .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                             .onGloballyPositioned { coordinates ->
                                 dropdownMenuTextFieldSize = coordinates.size.toSize()
                             }
@@ -167,7 +170,7 @@ fun AddressForm(label: String = "Address") {
                             countryError?.let {
                                 Text(
                                     it,
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     style = TextStyle(fontSize = 13.sp)
                                 )
                             } ?: Text("Country")
@@ -190,29 +193,27 @@ fun AddressForm(label: String = "Address") {
                         expanded = dropdownMenuExpanded,
                         onDismissRequest = { dropdownMenuExpanded = false },
                         modifier = Modifier
-                            .defaultMinSize(minHeight = 16.dp)
+                            .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                             .heightIn(max = 200.dp)
                             .width(with(LocalDensity.current) { dropdownMenuTextFieldSize.width.toDp() })
                     ) {
                         Countries.filter { it.startsWith(country, ignoreCase = true) }.forEach { c ->
-                            DropdownMenuItem(onClick = {
+                            DropdownMenuItem({ Text(c) }, onClick = {
                                 country = c
                                 dropdownMenuExpanded = false
-                            }) {
-                                Text(text = c)
-                            }
+                            })
                         }
                     }
                 }
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacers.small)) {
                 CustomTextField(
                     value = notes,
                     error = mutableStateOf(null),
                     label = "Notes",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(568.dp)
                         .focusRequester(focusRequesters[6]),
                     nextFocusRequester = focusRequesters[0]

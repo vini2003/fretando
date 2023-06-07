@@ -25,11 +25,12 @@ kotlin {
             dependencies {
                 implementation(project(':common'))
 
-                implementation(compose.desktop.currentOs)
+                implementation(compose.desktop.currentOs) {
+                    exclude group: 'com.google.android.material', module: 'material'
+                    exclude group: 'org.jetbrains.compose.material', module: 'material-desktop'
+                }
 
-                implementation("org.jetbrains.compose.foundation:foundation:${composeVersion}")
-                implementation("org.jetbrains.compose.material:material:${composeVersion}")
-                implementation("org.jetbrains.compose.ui:ui:${composeVersion}")
+                implementation(compose.material3)
             }
         }
     }

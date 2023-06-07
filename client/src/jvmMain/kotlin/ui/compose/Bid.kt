@@ -1,16 +1,20 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package ui.compose
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ui.theme.paddings
 
 @Composable
 fun Bid() {
@@ -18,9 +22,9 @@ fun Bid() {
 
     Column(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(MaterialTheme.paddings.small)
     ) {
-        Text("Bid", fontSize = 18.sp, color = MaterialTheme.colors.primary)
+        Text("Bid", fontSize = 18.sp, color = MaterialTheme.colorScheme.primary)
 
         Currency()
 

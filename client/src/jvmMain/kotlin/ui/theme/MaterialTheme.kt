@@ -1,23 +1,24 @@
 package ui.theme
 
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @get:Composable
-val Colors.lightGray: Color
+val Color.lightGray: Color
     get() = Color.LightGray.copy(alpha = 0.1f)
 
 @get:Composable
-val Colors.mediumGray: Color
+val Color.mediumGray: Color
     get() = Color.LightGray.copy(alpha = 0.2f)
+
 
 object Sizes {
     val small = 8.dp
     val medium = 16.dp
     val large = 24.dp
+    val extraLarge = 48.dp
 }
 
 val MaterialTheme.sizes: Sizes

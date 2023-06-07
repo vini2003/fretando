@@ -2,6 +2,9 @@ package ui.compose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -11,6 +14,9 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ui.theme.paddings
+import ui.theme.sizes
+import ui.theme.spacers
 
 @ExperimentalComposeUiApi
 @Composable
@@ -38,8 +44,8 @@ fun Cargo() {
         Text(
             "Cargo",
             fontSize = 18.sp,
-            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-            modifier = Modifier.padding(8.dp)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F), // TODO: Check this!
+            modifier = Modifier.padding(MaterialTheme.paddings.small)
         )
         Divider(color = Color.LightGray, thickness = 1.dp, modifier = Modifier.padding(horizontal = 8.dp))
 
@@ -53,7 +59,7 @@ fun Cargo() {
                     error = lengthError,
                     label = "Length",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(120.dp)
                         .focusRequester(focusRequesters[0]),
                     nextFocusRequester = focusRequesters[1]
@@ -64,7 +70,7 @@ fun Cargo() {
                     error = widthError,
                     label = "Width",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(120.dp)
                         .focusRequester(focusRequesters[1]),
                     nextFocusRequester = focusRequesters[2]
@@ -75,7 +81,7 @@ fun Cargo() {
                     error = heightError,
                     label = "Height",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(120.dp)
                         .focusRequester(focusRequesters[2]),
                     nextFocusRequester = focusRequesters[3]
@@ -86,7 +92,7 @@ fun Cargo() {
                     error = weightError,
                     label = "Weight",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(120.dp)
                         .focusRequester(focusRequesters[3]),
                     nextFocusRequester = focusRequesters[4]
@@ -95,13 +101,13 @@ fun Cargo() {
 
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacers.small)) {
                 CustomTextField(
                     value = description,
                     error = descriptionError,
                     label = "Description",
                     modifier = Modifier
-                        .defaultMinSize(minHeight = 16.dp)
+                        .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(568.dp)
                         .focusRequester(focusRequesters[4]),
                     nextFocusRequester = focusRequesters[0]

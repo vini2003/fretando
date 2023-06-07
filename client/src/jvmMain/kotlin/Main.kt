@@ -1,15 +1,23 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
+@file:OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -20,37 +28,53 @@ import dev.vini2003.fretando.common.`object`.faker.FakeDataGenerator
 import ui.compose.RequestCard
 import ui.compose.RequestCardList
 import ui.compose.RequestForm
+import ui.theme.AppTheme
+import ui.theme.paddings
+import ui.theme.spacers
 
 @Composable
 fun MyApp() {
-    MaterialTheme {
-        TopAppBar(
-            title = { Text("Fretando") },
-            navigationIcon = {
-                IconButton(onClick = { /* doSomething() */ }) {
-                    Icon(Icons.Default.Menu, contentDescription = "Menu")
+    AppTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            TopAppBar(
+                title = { Text("Fretando") },
+                navigationIcon = {
+                    IconButton(onClick = { /* doSomething() */ }) {
+                        Icon(
+                            Icons.Default.Home,
+                            contentDescription = "Menu",
+                            modifier = Modifier
+                                .width(48.dp)
+                                .height(48.dp)
+                                .clip(MaterialTheme.shapes.large)
+                                .background(MaterialTheme.colorScheme.secondaryContainer)
+                                .padding(MaterialTheme.paddings.small)
+                        )
+                    }
                 }
-            }
-        )
+            )
 
-        Row {
-            // Sidebar
-            Box(
-                modifier = Modifier
-                    .offset(y = 56.dp)
-                    .width(200.dp)
-                    .fillMaxHeight()
-                    .background(MaterialTheme.colors.primaryVariant) // change to your desired purple color
-            ) {
-                SidebarContent()
-            }
+            Row {
+                // Sidebar
+                Box(
+                    modifier = Modifier
+                        .offset(y = 56.dp)
+                        .width(200.dp)
+                        .fillMaxHeight()
+                        .background(MaterialTheme.colorScheme.surface) // change to your desired purple color
+                ) {
+                    SidebarContent()
+                }
 
-            // The rest of your app
-            Box(
-                modifier = Modifier
-                    .offset(y = 56.dp)
-            ) {
-                MainContent()
+                // The rest of your app
+                Box(
+                    modifier = Modifier
+                        .offset(y = 56.dp)
+                ) {
+                    MainContent()
+                }
             }
         }
     }
@@ -59,12 +83,49 @@ fun MyApp() {
 @Composable
 fun SidebarContent() {
     // Define what the sidebar looks like
-    Column(modifier = Modifier.padding(8.dp)) {
-        Text("Item 1", color = Color.White)
-        Text("Item 2", color = Color.White)
-        // More items...
+    Column(
+        modifier = Modifier.padding(top = MaterialTheme.paddings.small)
+    ) {
+        SidebarContentItem(0, Icons.Default.Person, "My Profile") { /* doSomething() */ }
+        Spacer(Modifier.height(MaterialTheme.spacers.medium))
+        SidebarContentItem(1, Icons.Default.List, "Requests") { /* doSomething() */ }
+        SidebarContentItem(2, Icons.Default.List, "Offers") { /* doSomething() */ }
+        Spacer(Modifier.height(MaterialTheme.spacers.medium))
+        SidebarContentItem(3, Icons.Default.List, "My Requests") { /* doSomething() */ }
+        SidebarContentItem(4, Icons.Default.List, "My Offers") { /* doSomething() */ }
     }
 }
+
+@Composable
+fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .height(54.dp)
+            .fillMaxWidth()
+            .padding(MaterialTheme.paddings.verySmall)
+            .clip(MaterialTheme.shapes.large)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .clickable(onClick = onClick)
+            .padding(start = MaterialTheme.paddings.medium)
+    ) {
+        Icon(
+            icon,
+            contentDescription = "Arrow icon",
+            tint = if (index % 2 == 0) Color.White.copy(alpha = 0.9F) else Color.White
+        )
+        Text(
+            text = label,
+            modifier = Modifier.padding(horizontal = 8.dp).wrapContentSize(Alignment.CenterStart),
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = if (index % 2 == 0) Color.White.copy(alpha = 0.9F) else Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+    }
+}
+
 
 @Composable
 fun MainContent() {

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package ui.compose
 
 import androidx.compose.foundation.clickable
@@ -6,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import java.util.*
@@ -38,12 +41,10 @@ fun Currency(label: String = "Currency") {
             onDismissRequest = { expanded = false },
         ) {
             Currency.getAvailableCurrencies().filter { it.currencyCode.startsWith(currency, ignoreCase = true) }.forEach { c ->
-                DropdownMenuItem(onClick = {
+                DropdownMenuItem({ Text(c.currencyCode) }, onClick = {
                     currency = c.currencyCode
                     expanded = false
-                }) {
-                    Text(text = c.currencyCode)
-                }
+                })
             }
         }
     }
