@@ -13,18 +13,19 @@ import java.util.Map;
 @RequestMapping("/api/cargo")
 public class CargoController {
     private final CargoRepository cargoRepository;
+
     public CargoController(CargoRepository cargoRepository) {
         this.cargoRepository = cargoRepository;
     }
 
     @GetMapping("/")
-    public List<Cargo> getAllCargos() {
-        return cargoRepository.findAll();
+    public ResponseEntity<List<Cargo>> getAllCargos() {
+        return ResponseEntity.ok(cargoRepository.findAll());
     }
 
     @PostMapping("/")
-    public Cargo createCargo(@RequestBody Cargo cargo) {
-        return cargoRepository.save(cargo);
+    public ResponseEntity<Cargo> createCargo(@RequestBody Cargo cargo) {
+        return ResponseEntity.ok(cargoRepository.save(cargo));
     }
 
     @GetMapping("/{id}")

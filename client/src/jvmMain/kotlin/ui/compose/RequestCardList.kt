@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -22,7 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.server.FakeDataGenerator
+import dev.vini2003.fretando.common.util.FakeUtil
 import ui.theme.paddings
 import ui.theme.spacers
 import kotlin.math.max
@@ -39,7 +40,7 @@ fun RequestCardList() {
         mutableStateOf(
             List(96) {
                 List(20) {
-                    dev.vini2003.fretando.server.FakeDataGenerator.createFakeRequest()
+                    FakeUtil.createFakeRequest()
                 }
             }
         )

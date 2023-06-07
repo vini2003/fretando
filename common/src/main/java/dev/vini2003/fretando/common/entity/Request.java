@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -22,6 +22,6 @@ public class Request {
     private Address destination;
     @OneToOne(cascade = CascadeType.ALL)
     private Cargo cargo;
-    @OneToMany(mappedBy = "request")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Bid> bids;
 }

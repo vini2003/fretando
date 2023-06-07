@@ -19,13 +19,13 @@ public class AddressController {
     }
 
     @GetMapping("/")
-    public List<Address> getAllAddresses() {
-        return addressRepository.findAll();
+    public ResponseEntity<List<Address>> getAllAddresses() {
+        return ResponseEntity.ok(addressRepository.findAll());
     }
 
     @PostMapping("/")
-    public Address createAddress(@RequestBody Address address) {
-        return addressRepository.save(address);
+    public ResponseEntity<Address> createAddress(@RequestBody Address address) {
+        return ResponseEntity.ok(addressRepository.save(address));
     }
 
     @GetMapping("/{id}")

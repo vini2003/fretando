@@ -7,11 +7,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.server.entity.Address
+import dev.vini2003.fretando.common.entity.Address
 import ui.theme.paddings
 
 @Composable
-fun AddressCard(address: dev.vini2003.fretando.server.entity.Address) {
+fun AddressCard(address: Address) {
     Card(
         modifier = Modifier
             .padding(MaterialTheme.paddings.medium),

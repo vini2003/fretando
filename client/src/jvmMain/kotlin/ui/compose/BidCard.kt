@@ -11,11 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.server.entity.Bid
+import dev.vini2003.fretando.common.entity.Bid
 import ui.theme.paddings
 
 @Composable
-fun BidCard(bid: dev.vini2003.fretando.server.entity.Bid) {
+fun BidCard(bid: Bid) {
     Card(
         modifier = Modifier
             .padding(MaterialTheme.paddings.medium),

@@ -11,12 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import dev.vini2003.fretando.server.entity.Address
+import dev.vini2003.fretando.common.entity.Address
 import ui.theme.paddings
 import ui.theme.spacers
 
 @Composable
-fun AddressBlock(title: String, address: dev.vini2003.fretando.server.entity.Address, modifier: Modifier = Modifier) {
+fun AddressBlock(title: String, address: dev.vini2003.fretando.common.entity.Address, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surfaceVariant)

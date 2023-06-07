@@ -7,11 +7,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.server.entity.Cargo
+import dev.vini2003.fretando.common.entity.Cargo
 import ui.theme.paddings
 
 @Composable
-fun CargoCard(cargo: dev.vini2003.fretando.server.entity.Cargo) {
+fun CargoCard(cargo: Cargo) {
     Card(
         modifier = Modifier
             .padding(MaterialTheme.paddings.medium),

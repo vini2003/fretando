@@ -19,13 +19,13 @@ public class BidController {
     }
 
     @GetMapping("/")
-    public List<Bid> getAllBids() {
-        return bidRepository.findAll();
+    public ResponseEntity<List<Bid>> getAllBids() {
+        return ResponseEntity.ok(bidRepository.findAll());
     }
 
     @PostMapping("/")
-    public Bid createBid(@RequestBody Bid bid) {
-        return bidRepository.save(bid);
+    public ResponseEntity<Bid> createBid(@RequestBody Bid bid) {
+        return ResponseEntity.ok(bidRepository.save(bid));
     }
 
     @GetMapping("/{id}")

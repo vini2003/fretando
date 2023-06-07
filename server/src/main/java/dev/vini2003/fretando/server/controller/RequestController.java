@@ -19,13 +19,13 @@ public class RequestController {
     }
 
     @GetMapping("/")
-    public List<Request> getAllRequests() {
-        return requestRepository.findAll();
+    public ResponseEntity<List<Request>> getAllRequests() {
+        return ResponseEntity.ok(requestRepository.findAll());
     }
 
     @PostMapping("/")
-    public Request createRequest(@RequestBody Request request) {
-        return requestRepository.save(request);
+    public ResponseEntity<Request> createRequest(@RequestBody Request request) {
+        return ResponseEntity.ok(requestRepository.save(request));
     }
 
     @GetMapping("/{id}")
