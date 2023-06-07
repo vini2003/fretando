@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package ui.compose
 
@@ -23,6 +23,7 @@ import androidx.compose.ui.input.key.*
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -68,7 +69,8 @@ fun AddressForm(label: String = "Address") {
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
         Text(
             label,
-            fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F), // TODO: Check this!
             modifier = Modifier.padding(MaterialTheme.paddings.small)
         )

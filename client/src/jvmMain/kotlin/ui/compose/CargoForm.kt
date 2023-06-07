@@ -1,7 +1,6 @@
 package ui.compose
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ui.theme.paddings
@@ -20,7 +20,7 @@ import ui.theme.spacers
 
 @ExperimentalComposeUiApi
 @Composable
-fun Cargo() {
+fun CargoForm() {
     // Create FocusRequesters for each TextField
     val focusRequesters = remember { List(5) { FocusRequester() } }
 
@@ -43,11 +43,11 @@ fun Cargo() {
     Column {
         Text(
             "Cargo",
-            fontSize = 18.sp,
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F), // TODO: Check this!
             modifier = Modifier.padding(MaterialTheme.paddings.small)
         )
-        Divider(color = Color.LightGray, thickness = 1.dp, modifier = Modifier.padding(horizontal = 8.dp))
 
         Column(
             modifier = Modifier

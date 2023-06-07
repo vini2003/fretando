@@ -1,7 +1,8 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package ui.compose
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import ui.theme.paddings
 
 @Composable
+@Preview
 fun Bid() {
     var currencyAmount by remember { mutableStateOf("") }
 

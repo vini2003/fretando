@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -28,20 +28,22 @@ import dev.vini2003.fretando.common.`object`.faker.FakeDataGenerator
 import ui.compose.RequestCard
 import ui.compose.RequestCardList
 import ui.compose.RequestForm
+import ui.compose.ShowRequestFormPopup
 import ui.theme.AppTheme
 import ui.theme.paddings
 import ui.theme.spacers
 
 @Composable
+@Preview
 fun MyApp() {
     AppTheme {
         Surface(
             color = MaterialTheme.colorScheme.background,
         ) {
             TopAppBar(
-                title = { Text("Fretando") },
+                title = { Text("Fretando", fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)) },
                 navigationIcon = {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { /* doSomething() */ }, modifier = Modifier.padding(start = 12.dp)) {
                         Icon(
                             Icons.Default.Home,
                             contentDescription = "Menu",
@@ -60,10 +62,11 @@ fun MyApp() {
                 // Sidebar
                 Box(
                     modifier = Modifier
-                        .offset(y = 56.dp)
+                        .offset(y = 76.dp)
                         .width(200.dp)
                         .fillMaxHeight()
                         .background(MaterialTheme.colorScheme.surface) // change to your desired purple color
+                        .padding(start = MaterialTheme.paddings.medium)
                 ) {
                     SidebarContent()
                 }
@@ -130,15 +133,12 @@ fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: ()
 @Composable
 fun MainContent() {
     // Your main app content here...
-    RequestCardList()
-}
+    Box(modifier = Modifier.fillMaxSize()) {
+        RequestCardList()
 
-
-@Composable
-@Preview
-fun App() {
-    MaterialTheme {
-        MyApp()
+        Box(modifier = Modifier.align(Alignment.BottomEnd).padding(MaterialTheme.paddings.medium).offset(y = (-64).dp)) {
+            ShowRequestFormPopup()
+        }
     }
 }
 
@@ -147,6 +147,6 @@ fun main() = application {
     val windowState = rememberWindowState(size = DpSize(580.dp, 1000.dp))
 
     Window(onCloseRequest = ::exitApplication, title = "Fretando", state = windowState) {
-        App()
+        MyApp()
     }
 }
