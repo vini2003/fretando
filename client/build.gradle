@@ -30,6 +30,8 @@ kotlin {
                     exclude group: 'org.jetbrains.compose.material', module: 'material-desktop'
                 }
 
+                implementation("org.jetbrains.compose.material:material-icons-extended:${composeVersion}")
+
                 implementation(compose.material3)
             }
         }

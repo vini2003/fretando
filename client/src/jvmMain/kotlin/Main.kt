@@ -4,7 +4,6 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
@@ -15,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -24,10 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import dev.vini2003.fretando.common.`object`.faker.FakeDataGenerator
-import ui.compose.RequestCard
 import ui.compose.RequestCardList
-import ui.compose.RequestForm
 import ui.compose.ShowRequestFormPopup
 import ui.theme.AppTheme
 import ui.theme.paddings
@@ -37,8 +34,8 @@ import ui.theme.spacers
 @Preview
 fun MyApp() {
     AppTheme {
-        Surface(
-            color = MaterialTheme.colorScheme.background,
+        Column (
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
         ) {
             TopAppBar(
                 title = { Text("Fretando", fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)) },
@@ -60,9 +57,8 @@ fun MyApp() {
 
             Row {
                 // Sidebar
-                Box(
+                Surface(
                     modifier = Modifier
-                        .offset(y = 76.dp)
                         .width(200.dp)
                         .fillMaxHeight()
                         .background(MaterialTheme.colorScheme.surface) // change to your desired purple color
@@ -72,12 +68,7 @@ fun MyApp() {
                 }
 
                 // The rest of your app
-                Box(
-                    modifier = Modifier
-                        .offset(y = 56.dp)
-                ) {
-                    MainContent()
-                }
+                MainContent()
             }
         }
     }
@@ -86,9 +77,7 @@ fun MyApp() {
 @Composable
 fun SidebarContent() {
     // Define what the sidebar looks like
-    Column(
-        modifier = Modifier.padding(top = MaterialTheme.paddings.small)
-    ) {
+    Column {
         SidebarContentItem(0, Icons.Default.Person, "My Profile") { /* doSomething() */ }
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
         SidebarContentItem(1, Icons.Default.List, "Requests") { /* doSomething() */ }
@@ -133,12 +122,10 @@ fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: ()
 @Composable
 fun MainContent() {
     // Your main app content here...
-    Box(modifier = Modifier.fillMaxSize()) {
+    Column {
         RequestCardList()
 
-        Box(modifier = Modifier.align(Alignment.BottomEnd).padding(MaterialTheme.paddings.medium).offset(y = (-64).dp)) {
-            ShowRequestFormPopup()
-        }
+        //    ShowRequestFormPopup()
     }
 }
 
