@@ -3,6 +3,7 @@
 package ui.compose
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -13,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,38 +27,14 @@ import ui.theme.spacers
 @Composable
 @Preview
 fun ShowRequestFormPopup() {
-    val showDialog = remember { mutableStateOf(false) }
+    RequestForm(onCreateClick = {
+        // Do something with the filled in request here
+        // Close the dialog
 
-    // align the button to the bottom right corner
-    Button(onClick = { showDialog.value = true }, modifier = Modifier.size(64.dp)) {
-        Text("+", fontWeight = FontWeight.Bold, fontSize = 24.sp)
-    }
+    }, onCancelClick = {
+        // Close the dialog
 
-    if (showDialog.value) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.33f)
-                .defaultMinSize(minWidth = 580.dp, minHeight = 640.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Surface(
-                modifier = Modifier.padding(32.dp).shadow(24.dp, MaterialTheme.shapes.medium), // Padding to ensure the dialog doesn't occupy the entire screen
-                shape = MaterialTheme.shapes.medium, // To give a rounded corner effect to the dialog box
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(32.dp)) {
-                    // Your request form goes here
-                    RequestForm(onCreateClick = {
-                        // Do something with the filled in request here
-                        // Close the dialog
-                        showDialog.value = false
-                    }, onCancelClick = {
-                        // Close the dialog
-                        showDialog.value = false
-                    })
-                }
-            }
-        }
-    }
+    })
 }
 
 @ExperimentalComposeUiApi
@@ -68,10 +46,18 @@ fun RequestForm(
     onCreateClick: () -> Unit = {},
 ) {
     val baseModifier = Modifier
-        .fillMaxWidth()
         .defaultMinSize(minWidth = 580.dp, minHeight = 640.dp)
 
-    Column(modifier = baseModifier.verticalScroll(rememberScrollState()).height(960.dp)) {
+    Column(
+        modifier = baseModifier
+            .width(540.dp)
+            .height(680.dp)
+            .padding(MaterialTheme.paddings.large)
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surface)
+            .shadow(4.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
         AddressSection()
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
         CargoForm()
@@ -93,7 +79,7 @@ fun ButtonsSection(onCancelClick: () -> Unit, onCreateClick: () -> Unit) {
     Row {
         CancelButton(onCancelClick = onCancelClick)
         Spacer(Modifier.width(MaterialTheme.sizes.small))
-        CreateButton(Modifier.weight(1.0f), onCreateClick = onCreateClick)
+        CreateButton(Modifier, onCreateClick = onCreateClick)
     }
 }
 

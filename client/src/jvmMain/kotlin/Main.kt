@@ -24,15 +24,52 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import ui.compose.RequestCardList
 import ui.theme.AppTheme
 import ui.theme.paddings
 import ui.theme.spacers
 
+// Add these imports at the top of your file
+import androidx.compose.runtime.*
+import androidx.compose.ui.window.Popup
+import dev.vini2003.fretando.common.util.FakeUtil
+import ui.compose.*
+
+// Create a data class for Popup
+data class PopupComposable(val id: Int, val content: @Composable () -> Unit)
+
 @Composable
-@Preview
 fun MyApp() {
     AppTheme {
+        // Keep a list of Composables here.
+        var popupList by remember { mutableStateOf(listOf<PopupComposable>()) }
+
+        // A function to add a new Composable to the list
+        fun addPopup(popup: PopupComposable) {
+            popupList = popupList + popup
+        }
+
+        // A function to remove a Composable from the list
+        fun removePopup(popup: PopupComposable) {
+            popupList = popupList.filterNot { it.id == popup.id }
+        }
+
+
+        // Display them in the middle of the screen, based on their size.
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Iterate over each PopupComposable in the list
+            popupList.forEach { popup ->
+                // Display the popup
+                Popup(
+                    alignment = Alignment.Center
+                ) {
+                    // Use the popup's content
+                    ShowRequestFormPopup()
+                }
+            }
+        }
+
         Column (
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
         ) {
@@ -122,13 +159,12 @@ fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: ()
 fun MainContent() {
     // Your main app content here...
     Column {
-        RequestCardList()
-        // AddressCard(FakeDataGenerator.createFakeAddress())
-        // BidCard(FakeDataGenerator.createFakeBid(UUID.randomUUID()))
-        // CargoCard(FakeDataGenerator.createFakeCargo())
-        // RequestCard(FakeDataGenerator.createFakeRequest())
+        // RequestCardList()
+        AddressCard(FakeUtil.createFakeAddress())
+        BidCard(FakeUtil.createFakeBid())
+        CargoCard(FakeUtil.createFakeCargo())
+        RequestCard(FakeUtil.createFakeRequest())
 
-        //    ShowRequestFormPopup()
     }
 }
 
