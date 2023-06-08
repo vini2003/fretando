@@ -19,11 +19,6 @@ allprojects {
         implementation("org.jetbrains:annotations:${jetbrainsAnnotationsVersion}")
 
         implementation("com.github.javafaker:javafaker:${javaFakerVersion}")
-
-        testImplementation(platform("org.junit:junit-bom:${junitBomVersion}"))
-        testImplementation("org.junit.jupiter:junit-jupiter-api")
-
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     }
 
     compileJava {

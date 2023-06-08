@@ -2,7 +2,6 @@
 
 package dev.vini2003.fretando.client.ui.compose
 
-import dev.vini2003.fretando.client.PopupComposable
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -12,10 +11,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -29,26 +25,30 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import dev.vini2003.fretando.common.util.FakeUtil
+import dev.vini2003.fretando.client.PopupComposable
+import dev.vini2003.fretando.client.repository.RemoteRequestRepository
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.math.max
 import kotlin.math.min
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterial3Api
 @Composable
 @Preview
 fun RequestCardList() {
+    val scope = rememberCoroutineScope()
+
     // Manage page index state
     var pageIndex by remember { mutableStateOf(0) }
 
     // Generate 48 pages with 20 requests each
-    val requestPages by remember {
+    var requestPages by remember {
         mutableStateOf(
-            List(96) {
-                List(48) {
-                    FakeUtil.createFakeRequest()
-                }
+            runBlocking {
+                RemoteRequestRepository.findAll().chunked(20)
             }
         )
     }
@@ -59,6 +59,11 @@ fun RequestCardList() {
                 total = requestPages.size,
                 currentPage = pageIndex,
                 onSelectedPage = { selectedPage -> pageIndex = selectedPage },
+                onRefresh = {
+                    scope.launch {
+                        requestPages = RemoteRequestRepository.findAll().chunked(20)
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacers.medium))
@@ -103,16 +108,19 @@ fun Paginator(
     total: Int,
     currentPage: Int,
     onSelectedPage: (Int) -> Unit,
+    onRefresh: () -> Unit, // listener for the refresh button
 ) {
     val ButtonWidth = 40.dp
     val ArrowWidth = 48.dp // estimate, depends on your layout
+    val RefreshWidth = 48.dp // estimate, depends on your layout
     val SpaceWidth = 8.dp // estimate, depends on your layout
-    val MinWidth = ButtonWidth + 2 * SpaceWidth // minimum width to show one button
 
     BoxWithConstraints {
         val maxWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
 
-        val maxButtons = min(10, ((maxWidth - 2 * ArrowWidth - 4 * SpaceWidth) / (ButtonWidth + SpaceWidth)).toInt())
+        // Added RefreshWidth + SpaceWidth to the calculation to adjust for the refresh button
+        // TODO: Investigate div by zero!
+        val maxButtons = min(10, ((maxWidth - 2 * ArrowWidth - 2 * RefreshWidth - 5 * SpaceWidth) / (ButtonWidth + SpaceWidth)).toInt())
         val showArrows10 = maxWidth >= 2 * ArrowWidth + 2 * SpaceWidth + 10 * (ButtonWidth + SpaceWidth)
         val showArrows1 = maxWidth >= 2 * ArrowWidth + 2 * SpaceWidth + 2 * (ButtonWidth + SpaceWidth)
 
@@ -132,6 +140,11 @@ fun Paginator(
                 IconButton(onClick = { if (currentPage - 1 >= 0) onSelectedPage(currentPage - 1) }) {
                     Icon(Icons.Filled.ChevronLeft, contentDescription = "Previous page", tint = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
+            }
+
+            // Refresh button
+            IconButton(onClick = onRefresh) {
+                Icon(Icons.Filled.Refresh, contentDescription = "Refresh", tint = MaterialTheme.colorScheme.onPrimaryContainer)
             }
 
             Row(

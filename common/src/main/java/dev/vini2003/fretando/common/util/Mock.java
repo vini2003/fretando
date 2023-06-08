@@ -11,10 +11,10 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class FakeUtil {
+public class Mock {
     private static final Faker FAKER = new Faker(new Locale("en-US"));
 
-    public static Address createFakeAddress() {
+    public static Address address() {
         return new Address(
                 FAKER.random().nextLong(),
                 FAKER.address().streetName(),
@@ -27,7 +27,7 @@ public class FakeUtil {
         );
     }
 
-    public static Bid createFakeBid() {
+    public static Bid bid() {
         return new Bid(
                 FAKER.random().nextLong(),
                 FAKER.random().nextLong(),
@@ -35,7 +35,7 @@ public class FakeUtil {
         );
     }
 
-    public static Cargo createFakeCargo() {
+    public static Cargo cargo() {
         return new Cargo(
                 FAKER.random().nextLong(),
                 FAKER.number().randomDouble(2, 1, 100),
@@ -50,13 +50,13 @@ public class FakeUtil {
         );
     }
 
-    public static Request createFakeRequest() {
-        Address origin = createFakeAddress();
-        Address destination = createFakeAddress();
-        Cargo cargo = createFakeCargo();
+    public static Request request() {
+        Address origin = address();
+        Address destination = address();
+        Cargo cargo = cargo();
 
-        List<Bid> bids = IntStream.range(0, FAKER.number().numberBetween(1, 5))
-                .mapToObj(i -> createFakeBid())
+        List<Bid> bids = IntStream.range(0, 5)
+                .mapToObj(i -> bid())
                 .collect(Collectors.toList());
 
         return new Request(FAKER.random().nextLong(), origin, destination, cargo, bids);

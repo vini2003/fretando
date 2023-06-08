@@ -2,9 +2,9 @@
 
 package dev.vini2003.fretando.client.ui.compose
 
-import dev.vini2003.fretando.client.PopupComposable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.vini2003.fretando.client.PopupComposable
 import dev.vini2003.fretando.client.ui.theme.AppTheme
 import dev.vini2003.fretando.client.ui.theme.paddings
 
@@ -95,12 +96,16 @@ fun Application() {
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Color.Black.copy(alpha = 0.5f))
-                            .clickable {
-                                // Remove the last popup when clicking on the background
-                                if (popupList.isNotEmpty()) {
-                                    removePopup(popupList.last().id)
-                                }
-                            }
+                            .clickable(
+                                onClick = {
+                                    // Remove the last popup when clicking on the background
+                                    if (popupList.isNotEmpty()) {
+                                        removePopup(popupList.last().id)
+                                    }
+                                },
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            )
                     )
                 }
 

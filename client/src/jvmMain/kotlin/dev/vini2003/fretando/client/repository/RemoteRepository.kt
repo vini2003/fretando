@@ -1,7 +1,8 @@
 package dev.vini2003.fretando.client.repository
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
@@ -11,36 +12,42 @@ import io.ktor.serialization.gson.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-open class RemoteRepository<T>(val apiUrl: String) {
-    val client = HttpClient(CIO) {
+inline fun <reified T> RemoteRepository(apiUrl: String) = RemoteRepository(apiUrl, TypeToken.get(T::class.java))
+
+class RemoteRepository<T> (private val apiUrl: String, private val type: TypeToken<T>) {
+    private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             gson()
         }
     }
 
-    suspend inline fun <reified T> findAll(): List<T> = withContext(Dispatchers.IO) {
-        client.get(apiUrl).body()
+    private val gson = Gson()
+
+    suspend fun findAll(): List<T> = withContext(Dispatchers.IO) {
+        val response = client.get("$apiUrl/").bodyAsText()
+        gson.fromJson(response, TypeToken.getParameterized(List::class.java, type.type).type)
     }
 
-    suspend inline fun <reified T> findById(id: String): T = withContext(Dispatchers.IO) {
-        client.get("$apiUrl/$id").body()
+    suspend fun findById(id: Long): T = withContext(Dispatchers.IO) {
+        val response = client.get("$apiUrl/$id").bodyAsText()
+        gson.fromJson(response, type)
     }
 
-    suspend inline fun <reified T> save(entity: T): HttpResponse = withContext(Dispatchers.IO) {
-        client.post(apiUrl) {
+    suspend fun save(entity: T): HttpResponse = withContext(Dispatchers.IO) {
+        client.post("$apiUrl/") {
             contentType(ContentType.Application.Json)
-            setBody(entity)
+            setBody(gson.toJson(entity))
         }
     }
 
-    suspend inline fun <reified T> update(id: String, entity: T): HttpResponse = withContext(Dispatchers.IO) {
+    suspend fun update(id: Long, entity: T): HttpResponse = withContext(Dispatchers.IO) {
         client.put("$apiUrl/$id") {
             contentType(ContentType.Application.Json)
-            setBody(entity)
+            setBody(gson.toJson(entity))
         }
     }
 
-    suspend inline fun <reified T> deleteById(id: String): HttpResponse = withContext(Dispatchers.IO) {
+    suspend fun deleteById(id: Long): HttpResponse = withContext(Dispatchers.IO) {
         client.delete("$apiUrl/$id")
     }
 }

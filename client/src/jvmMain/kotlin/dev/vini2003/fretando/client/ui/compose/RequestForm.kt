@@ -2,6 +2,7 @@
 
 package dev.vini2003.fretando.client.ui.compose
 
+import CargoForm
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -32,7 +33,6 @@ fun RequestForm(
     Column(
         modifier = Modifier
             .width(600.dp)
-            .height(970.dp)
             .shadow(4.dp, MaterialTheme.shapes.medium)
             .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorScheme.surface)
@@ -47,6 +47,7 @@ fun RequestForm(
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 @Preview
 fun AddressSection() {
@@ -73,7 +74,6 @@ fun CancelButton(onCancelClick: () -> Unit) {
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
     ) {
         Text("Close", style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onErrorContainer, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
-        // TODO: typography became displayMedium.
     }
 }
 
@@ -86,6 +86,5 @@ fun CreateButton(modifier: Modifier, onCreateClick: () -> Unit) {
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
     ) {
         Text("Create", style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
-        // TODO: typography became displayMedium.
     }
 }
