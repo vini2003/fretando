@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package ui.compose
 
+import PopupComposable
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,14 +15,17 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,30 +45,54 @@ fun RequestCardList() {
     val requestPages by remember {
         mutableStateOf(
             List(96) {
-                List(20) {
+                List(48) {
                     FakeUtil.createFakeRequest()
                 }
             }
         )
     }
 
-    Column {
-        Paginator(
-            total = requestPages.size,
-            currentPage = pageIndex,
-            onSelectedPage = { selectedPage -> pageIndex = selectedPage },
-        )
+    Box {
+        Column {
+            Paginator(
+                total = requestPages.size,
+                currentPage = pageIndex,
+                onSelectedPage = { selectedPage -> pageIndex = selectedPage },
+            )
 
-        Spacer(modifier = Modifier.height(MaterialTheme.spacers.medium))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacers.medium))
 
-        // Use LazyVerticalGrid to display the list
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 320.dp),
-            contentPadding = PaddingValues(MaterialTheme.paddings.medium)
-        ) {
-            items(requestPages[pageIndex]) { request ->
-                RequestCard(request = request)
+            // Use LazyVerticalGrid to display the list
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 320.dp),
+                contentPadding = PaddingValues(MaterialTheme.paddings.medium)
+            ) {
+                items(requestPages[pageIndex]) { request ->
+                    RequestCard(request = request)
+                }
             }
+        }
+
+        val addPopup = LocalAddPopup.current
+        val removePopup = LocalRemovePopup.current
+
+        IconButton(onClick = {
+            addPopup(PopupComposable { id ->
+                RequestForm(onCancelClick = {
+                    removePopup(id)
+                }, onCreateClick = {
+                    removePopup(id)
+                })
+            })
+        }, modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .size(128.dp)
+            .padding(MaterialTheme.paddings.large)
+            .shadow(4.dp, MaterialTheme.shapes.large)
+            .clip(MaterialTheme.shapes.large)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+        ) {
+            Icon(Icons.Rounded.Add, contentDescription = "Create new request", tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(48.dp))
         }
     }
 }

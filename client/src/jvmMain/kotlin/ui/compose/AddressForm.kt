@@ -171,9 +171,9 @@ fun AddressForm(label: String = "Address") {
                                 Text(
                                     it,
                                     color = MaterialTheme.colorScheme.error,
-                                    style = TextStyle(fontSize = 13.sp)
+                                    style = TextStyle(fontSize = 14.sp)
                                 )
-                            } ?: Text("Country")
+                            } ?: Text(text = "Country", fontSize = 14.sp)
                         },
                         trailingIcon = {
                             Icon(

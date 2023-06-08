@@ -7,11 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,9 +19,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import ui.theme.paddings
-import ui.theme.sizes
 import ui.theme.spacers
 
 @Composable
@@ -50,13 +48,13 @@ fun RequestForm(
 
     Column(
         modifier = baseModifier
-            .width(540.dp)
-            .height(680.dp)
-            .padding(MaterialTheme.paddings.large)
+            .width(600.dp)
+            .height(970.dp)
+            .shadow(4.dp, MaterialTheme.shapes.medium)
             .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorScheme.surface)
-            .shadow(4.dp)
             .verticalScroll(rememberScrollState())
+            .padding(MaterialTheme.paddings.large)
     ) {
         AddressSection()
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
@@ -78,7 +76,7 @@ fun AddressSection() {
 fun ButtonsSection(onCancelClick: () -> Unit, onCreateClick: () -> Unit) {
     Row {
         CancelButton(onCancelClick = onCancelClick)
-        Spacer(Modifier.width(MaterialTheme.sizes.small))
+        Spacer(Modifier.weight(1f))
         CreateButton(Modifier, onCreateClick = onCreateClick)
     }
 }
@@ -88,12 +86,10 @@ fun CancelButton(onCancelClick: () -> Unit) {
     Button(
         onClick = onCancelClick,
         modifier = Modifier
-            .padding(horizontal = MaterialTheme.paddings.medium)
-            .width(54.dp)
             .height(54.dp),
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
     ) {
-        Text("X", style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onErrorContainer, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
+        Text("Close", style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onErrorContainer, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
         // TODO: typography became displayMedium.
     }
 }
@@ -103,7 +99,6 @@ fun CreateButton(modifier: Modifier, onCreateClick: () -> Unit) {
     Button(
         onClick = onCreateClick,
         modifier = modifier
-            .padding(horizontal = MaterialTheme.paddings.medium)
             .height(54.dp),
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
     ) {
