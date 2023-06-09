@@ -16,6 +16,12 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Request(Address origin, Address destination, Cargo cargo) {
+        this.origin = origin;
+        this.destination = destination;
+        this.cargo = cargo;
+    }
+
     @OneToOne(cascade = CascadeType.ALL)
     private Address origin;
     @OneToOne(cascade = CascadeType.ALL)

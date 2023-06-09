@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -20,40 +21,126 @@ import dev.vini2003.fretando.client.ui.theme.sizes
 import dev.vini2003.fretando.client.ui.theme.spacers
 import dev.vini2003.fretando.common.entity.Cargo
 
+data class CargoFormData(
+    val length: MutableState<String> = mutableStateOf(""),
+    val lengthError: MutableState<String?> = mutableStateOf(null),
+    val lengthUnit: MutableState<String> = mutableStateOf(Cargo.DimensionUnit.METERS.asString()),
+    val width: MutableState<String> = mutableStateOf(""),
+    val widthError: MutableState<String?> = mutableStateOf(null),
+    val widthUnit: MutableState<String> = mutableStateOf(Cargo.DimensionUnit.METERS.asString()),
+    val height: MutableState<String> = mutableStateOf(""),
+    val heightError: MutableState<String?> = mutableStateOf(null),
+    val heightUnit: MutableState<String> = mutableStateOf(Cargo.DimensionUnit.METERS.asString()),
+    val weight: MutableState<String> = mutableStateOf(""),
+    val weightError: MutableState<String?> = mutableStateOf(null),
+    val weightUnit: MutableState<String> = mutableStateOf(Cargo.WeightUnit.KILOGRAMS.asString()),
+    val description: MutableState<String> = mutableStateOf(""),
+    val descriptionError: MutableState<String?> = mutableStateOf(null),
+) {
+    fun validate(): Boolean {
+        var valid = true
+
+        if (length.value.isEmpty()) {
+            lengthError.value = "Length is required"
+            valid = false
+        } else {
+            lengthError.value = null
+        }
+
+        if (!Cargo.DimensionUnit.values().map { it.asString() }.contains(lengthUnit.value)) {
+            lengthError.value = "Length unit is invalid"
+            valid = false
+        } else {
+            lengthError.value = null
+        }
+
+        if (width.value.isEmpty()) {
+            widthError.value = "Width is required"
+            valid = false
+        } else {
+            widthError.value = null
+        }
+
+        if (!Cargo.DimensionUnit.values().map { it.asString() }.contains(widthUnit.value)) {
+            widthError.value = "Width unit is invalid"
+            valid = false
+        } else {
+            widthError.value = null
+        }
+
+        if (height.value.isEmpty()) {
+            heightError.value = "Height is required"
+            valid = false
+        } else {
+            heightError.value = null
+        }
+
+        if (!Cargo.DimensionUnit.values().map { it.asString() }.contains(heightUnit.value)) {
+            heightError.value = "Height unit is invalid"
+            valid = false
+        } else {
+            heightError.value = null
+        }
+
+        if (weight.value.isEmpty()) {
+            weightError.value = "Weight is required"
+            valid = false
+        } else {
+            weightError.value = null
+        }
+
+        if (!Cargo.WeightUnit.values().map { it.asString() }.contains(weightUnit.value)) {
+            weightError.value = "Weight unit is invalid"
+            valid = false
+        } else {
+            weightError.value = null
+        }
+
+        if (description.value.isEmpty()) {
+            descriptionError.value = "Description is required"
+            valid = false
+        } else {
+            descriptionError.value = null
+        }
+
+        return valid
+    }
+}
+
 @ExperimentalComposeUiApi
 @Composable
-fun CargoForm() {
+fun CargoForm(
+    data: MutableState<CargoFormData> = mutableStateOf(CargoFormData()),
+) {
     // Create FocusRequesters for each TextField
     val focusRequesters = remember { List(5) { FocusRequester() } }
 
     // Your existing state variables
-    val length = remember { mutableStateOf("") }
-    val lengthError = remember { mutableStateOf<String?>(null) }
-    val lengthUnit = remember { mutableStateOf(Cargo.LengthUnit.METERS.asString()) }
+    val length = remember { data.value.length }
+    val lengthError = remember { data.value.lengthError }
+    val lengthUnit = remember { data.value.lengthUnit }
 
-    val width = remember { mutableStateOf("") }
-    val widthError = remember { mutableStateOf<String?>(null) }
-    val widthUnit = remember { mutableStateOf(Cargo.LengthUnit.METERS.asString()) }
+    val width = remember { data.value.width }
+    val widthError = remember { data.value.widthError }
+    val widthUnit = remember { data.value.widthUnit }
 
-    val height = remember { mutableStateOf("") }
-    val heightError = remember { mutableStateOf<String?>(null) }
-    val heightUnit = remember { mutableStateOf(Cargo.LengthUnit.METERS.asString()) }
+    val height = remember { data.value.height }
+    val heightError = remember { data.value.heightError }
+    val heightUnit = remember { data.value.heightUnit }
 
-    val weight = remember { mutableStateOf("") }
-    val weightError = remember { mutableStateOf<String?>(null) }
-    val weightUnit = remember { mutableStateOf(Cargo.WeightUnit.KILOGRAMS.asString()) }
+    val weight = remember { data.value.weight }
+    val weightError = remember { data.value.weightError }
+    val weightUnit = remember { data.value.weightUnit }
 
-    val description = remember { mutableStateOf("") }
-    val descriptionError = remember { mutableStateOf<String?>(null) }
+    val description = remember { data.value.description }
+    val descriptionError = remember { data.value.descriptionError }
 
-    // Dimensions units dropdown
-    val unitsDimensions = Cargo.LengthUnit.values().map { it.asString() }
+    val unitsDimensions = Cargo.DimensionUnit.values().map { it.asString() }
 
     val lengthUnitDropdownExpanded = remember { mutableStateOf(false) }
     val widthUnitDropdownExpanded = remember { mutableStateOf(false) }
     val heightUnitDropdownExpanded = remember { mutableStateOf(false) }
 
-    // Weight units dropdown
     val unitsWeight = Cargo.WeightUnit.values().map { it.asString() }
 
     val weightDropdownExpanded = remember { mutableStateOf(false) }

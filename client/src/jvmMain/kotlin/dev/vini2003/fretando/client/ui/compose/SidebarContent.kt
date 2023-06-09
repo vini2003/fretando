@@ -2,7 +2,6 @@
 
 package dev.vini2003.fretando.client.ui.compose
 
-import dev.vini2003.fretando.client.PopupComposable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,26 +32,14 @@ fun SidebarContent() {
 
     Column {
         SidebarContentItem(0, Icons.Default.Person, "My Profile") {
-            addPopup(PopupComposable { id ->
-                RequestForm(onCancelClick = {
-                    removePopup(id)
-                })
-            })
+
         }
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
         SidebarContentItem(3, Icons.Default.Pages, "My Requests") {
-            addPopup(PopupComposable(0) {
-                Column {
-                    Text("My Requests")
-                }
-            })
+
         }
         SidebarContentItem(4, Icons.Default.RequestPage, "My Offers") {
-            addPopup(PopupComposable(0) {
-                Column {
-                    Text("My Offers")
-                }
-            })
+
         }
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
         SidebarContentItem(1, Icons.Default.Pages, "Requests") { /* doSomething() */ }

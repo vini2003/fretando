@@ -21,7 +21,7 @@ import dev.vini2003.fretando.client.ui.theme.AppTheme
 import dev.vini2003.fretando.client.ui.theme.paddings
 
 val LocalPopupList = staticCompositionLocalOf<List<PopupComposable>> { emptyList() }
-val LocalAddPopup = staticCompositionLocalOf<(PopupComposable) -> Unit> { {} }
+val LocalAddPopup = staticCompositionLocalOf<(@Composable (id: Int) -> Unit) -> Unit> { {} }
 val LocalRemovePopup = staticCompositionLocalOf<(Int) -> Unit> { {} }
 
 @Composable
@@ -29,8 +29,8 @@ fun Application() {
     AppTheme {
         var popupList by remember { mutableStateOf(listOf<PopupComposable>()) }
 
-        fun addPopup(popup: PopupComposable) {
-            popupList = popupList + popup
+        fun addPopup(popup: @Composable (id: Int) -> Unit) {
+            popupList = popupList + PopupComposable(content = popup)
         }
 
         fun removePopup(id: Int) {

@@ -25,10 +25,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import dev.vini2003.fretando.client.PopupComposable
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
+import dev.vini2003.fretando.common.entity.Address
+import dev.vini2003.fretando.common.entity.Cargo
+import dev.vini2003.fretando.common.entity.Request
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.math.max
@@ -53,7 +55,10 @@ fun RequestCardList() {
         )
     }
 
-    Box {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Column {
             Paginator(
                 total = requestPages.size,
@@ -68,13 +73,14 @@ fun RequestCardList() {
 
             Spacer(modifier = Modifier.height(MaterialTheme.spacers.medium))
 
-            // Use LazyVerticalGrid to display the list
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 320.dp),
                 contentPadding = PaddingValues(MaterialTheme.paddings.medium)
             ) {
-                items(requestPages[pageIndex]) { request ->
-                    RequestCard(request = request)
+                if (requestPages.isNotEmpty() && requestPages.size > pageIndex && requestPages[pageIndex].isNotEmpty()) {
+                    items(requestPages[pageIndex]) { request ->
+                        RequestCard(request = request)
+                    }
                 }
             }
         }
@@ -82,23 +88,87 @@ fun RequestCardList() {
         val addPopup = LocalAddPopup.current
         val removePopup = LocalRemovePopup.current
 
-        IconButton(onClick = {
-            addPopup(PopupComposable { id ->
-                RequestForm(onCancelClick = {
-                    removePopup(id)
-                }, onCreateClick = {
-                    removePopup(id)
-                })
-            })
-        }, modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .size(128.dp)
-            .padding(MaterialTheme.paddings.large)
-            .shadow(4.dp, MaterialTheme.shapes.large)
-            .clip(MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+        IconButton(
+            onClick = {
+                addPopup { id ->
+                    val requestFormData = remember {
+                        mutableStateOf(
+                            RequestFormData()
+                        )
+                    }
+
+                    RequestForm(
+                        data = requestFormData,
+                        onCancelClick = {
+                            removePopup(id)
+                        },
+                        onCreateClick = {
+                            if (requestFormData.value.validate()) {
+                                scope.launch {
+                                    val request = Request(
+                                        Address(
+                                            requestFormData.value.originAddressFormData.value.street.value,
+                                            requestFormData.value.originAddressFormData.value.number.value,
+                                            requestFormData.value.originAddressFormData.value.city.value,
+                                            requestFormData.value.originAddressFormData.value.state.value,
+                                            requestFormData.value.originAddressFormData.value.postalCode.value,
+                                            requestFormData.value.originAddressFormData.value.country.value,
+                                            requestFormData.value.originAddressFormData.value.notes.value,
+                                        ),
+                                        Address(
+                                            requestFormData.value.destinationAddressFormData.value.street.value,
+                                            requestFormData.value.destinationAddressFormData.value.number.value,
+                                            requestFormData.value.destinationAddressFormData.value.city.value,
+                                            requestFormData.value.destinationAddressFormData.value.state.value,
+                                            requestFormData.value.destinationAddressFormData.value.postalCode.value,
+                                            requestFormData.value.destinationAddressFormData.value.country.value,
+                                            requestFormData.value.destinationAddressFormData.value.notes.value,
+                                        ),
+                                        Cargo(
+                                            requestFormData.value.cargoFormData.value.length.value.toDouble(),
+                                            requestFormData.value.cargoFormData.value.lengthUnit.value.let {
+                                                Cargo.DimensionUnit.values().first { lengthUnit -> lengthUnit.asString() == it }
+                                            },
+                                            requestFormData.value.cargoFormData.value.width.value.toDouble(),
+                                            requestFormData.value.cargoFormData.value.widthUnit.value.let {
+                                                Cargo.DimensionUnit.values().first { widthUnit -> widthUnit.asString() == it }
+                                            },
+                                            requestFormData.value.cargoFormData.value.height.value.toDouble(),
+                                            requestFormData.value.cargoFormData.value.heightUnit.value.let {
+                                                Cargo.DimensionUnit.values().first { heightUnit -> heightUnit.asString() == it }
+                                            },
+                                            requestFormData.value.cargoFormData.value.weight.value.toDouble(),
+                                            requestFormData.value.cargoFormData.value.weightUnit.value.let {
+                                                Cargo.WeightUnit.values().first { weightUnit -> weightUnit.asString() == it }
+                                            },
+                                            requestFormData.value.cargoFormData.value.description.value
+                                        )
+                                    )
+
+                                    RemoteRequestRepository.save(request)
+
+                                    requestPages = RemoteRequestRepository.findAll().chunked(20)
+                                }
+
+                                removePopup(id)
+                            }
+                        }
+                    )
+                }
+            }, modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .size(128.dp)
+                .padding(MaterialTheme.paddings.large)
+                .shadow(4.dp, MaterialTheme.shapes.large)
+                .clip(MaterialTheme.shapes.large)
+                .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
-            Icon(Icons.Rounded.Add, contentDescription = "Create new request", tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(48.dp))
+            Icon(
+                Icons.Rounded.Add,
+                contentDescription = "Create new request",
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.size(48.dp)
+            )
         }
     }
 }
@@ -120,31 +190,49 @@ fun Paginator(
 
         // Added RefreshWidth + SpaceWidth to the calculation to adjust for the refresh button
         // TODO: Investigate div by zero!
-        val maxButtons = min(10, ((maxWidth - 2 * ArrowWidth - 2 * RefreshWidth - 5 * SpaceWidth) / (ButtonWidth + SpaceWidth)).toInt())
+        val maxButtons = min(
+            10,
+            ((maxWidth - 2 * ArrowWidth - 2 * RefreshWidth - 5 * SpaceWidth) / (ButtonWidth + SpaceWidth)).toInt()
+        )
         val showArrows10 = maxWidth >= 2 * ArrowWidth + 2 * SpaceWidth + 10 * (ButtonWidth + SpaceWidth)
         val showArrows1 = maxWidth >= 2 * ArrowWidth + 2 * SpaceWidth + 2 * (ButtonWidth + SpaceWidth)
 
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(vertical = MaterialTheme.paddings.small, horizontal = MaterialTheme.paddings.medium).fillMaxWidth()
+            modifier = Modifier.padding(
+                vertical = MaterialTheme.paddings.small,
+                horizontal = MaterialTheme.paddings.medium
+            ).fillMaxWidth()
         ) {
             if (showArrows10) {
                 IconButton(onClick = {
                     onSelectedPage(max(min(currentPage - (currentPage % 10), currentPage - 10), 0))
                 }) {
-                    Icon(Icons.Filled.ArrowBack, contentDescription = "Backward 10 pages", tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Icon(
+                        Icons.Filled.ArrowBack,
+                        contentDescription = "Backward 10 pages",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
             }
             if (showArrows1) {
                 IconButton(onClick = { if (currentPage - 1 >= 0) onSelectedPage(currentPage - 1) }) {
-                    Icon(Icons.Filled.ChevronLeft, contentDescription = "Previous page", tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Icon(
+                        Icons.Filled.ChevronLeft,
+                        contentDescription = "Previous page",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
             }
 
             // Refresh button
             IconButton(onClick = onRefresh) {
-                Icon(Icons.Filled.Refresh, contentDescription = "Refresh", tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                Icon(
+                    Icons.Filled.Refresh,
+                    contentDescription = "Refresh",
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
 
             Row(
@@ -179,14 +267,22 @@ fun Paginator(
 
             if (showArrows1) {
                 IconButton(onClick = { if (currentPage + 1 < total) onSelectedPage(currentPage + 1) }) {
-                    Icon(Icons.Filled.ChevronRight, contentDescription = "Next page", tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Icon(
+                        Icons.Filled.ChevronRight,
+                        contentDescription = "Next page",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
             }
             if (showArrows10) {
                 IconButton(onClick = {
                     onSelectedPage(min(currentPage + 10, total - 1))
                 }) {
-                    Icon(Icons.Filled.ArrowForward, contentDescription = "Forward 10 pages", tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Icon(
+                        Icons.Filled.ArrowForward,
+                        contentDescription = "Forward 10 pages",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
             }
         }

@@ -18,21 +18,33 @@ public class Cargo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Cargo(double length, DimensionUnit lengthUnit, double width, DimensionUnit widthUnit, double height, DimensionUnit heightUnit, double weight, WeightUnit weightUnit, String description) {
+        this.length = length;
+        this.lengthUnit = lengthUnit;
+        this.width = width;
+        this.widthUnit = widthUnit;
+        this.height = height;
+        this.heightUnit = heightUnit;
+        this.weight = weight;
+        this.weightUnit = weightUnit;
+        this.description = description;
+    }
+
     private double length;
-    private LengthUnit lengthUnit;
+    private DimensionUnit lengthUnit;
 
     private double width;
-    private LengthUnit widthUnit;
+    private DimensionUnit widthUnit;
 
     private double height;
-    private LengthUnit heightUnit;
+    private DimensionUnit heightUnit;
 
     private double weight;
     private WeightUnit weightUnit;
 
     private String description;
 
-    public enum LengthUnit {
+    public enum DimensionUnit {
         METERS, FEET;
 
         public String asString() {

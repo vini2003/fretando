@@ -1,6 +1,5 @@
 package dev.vini2003.fretando.client.ui.compose
 
-import dev.vini2003.fretando.client.PopupComposable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.common.entity.Request
 import dev.vini2003.fretando.client.ui.theme.paddings
+import dev.vini2003.fretando.common.entity.Request
 
 @ExperimentalMaterial3Api
 @Composable
@@ -40,13 +39,16 @@ fun RequestCard(request: Request) {
 
                 Button(
                     onClick = {
-                        addPopup(PopupComposable { id ->
-                            BidForm(request.id, onCancelClick = {
-                                removePopup(id)
-                            }, onBidClick = {
-                                removePopup(id)
-                            })
-                        })
+                        addPopup { id ->
+                            BidForm(
+                                request.id,
+                                onCancelClick = {
+                                    removePopup(id)
+                                },
+                                onBidClick = {
+                                    removePopup(id)
+                                })
+                        }
                     },
                     modifier = Modifier.padding(MaterialTheme.paddings.small),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary)

@@ -18,6 +18,11 @@ public class Bid  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Bid(Long requestId, double amount) {
+        this.requestId = requestId;
+        this.amount = amount;
+    }
+
     private Long requestId;
 
     private double amount;

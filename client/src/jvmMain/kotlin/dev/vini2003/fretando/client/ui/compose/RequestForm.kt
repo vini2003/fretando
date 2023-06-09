@@ -3,16 +3,17 @@
 package dev.vini2003.fretando.client.ui.compose
 
 import CargoForm
+import CargoFormData
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,13 +24,29 @@ import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
 
+data class RequestFormData(
+    val originAddressFormData: MutableState<AddressFormData> = mutableStateOf(AddressFormData()),
+    val destinationAddressFormData: MutableState<AddressFormData> = mutableStateOf(AddressFormData()),
+    val cargoFormData: MutableState<CargoFormData> = mutableStateOf(CargoFormData()),
+) {
+    fun validate(): Boolean {
+        return originAddressFormData.value.validate() && destinationAddressFormData.value.validate() && cargoFormData.value.validate()
+    }
+}
+
+@ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
 @Preview
 fun RequestForm(
     onCancelClick: () -> Unit = {},
     onCreateClick: () -> Unit = {},
+    data: MutableState<RequestFormData> = remember { mutableStateOf(RequestFormData()) }
 ) {
+    val originAddressFormData = remember { data.value.originAddressFormData }
+    val destinationAddressFormData = remember { data.value.destinationAddressFormData }
+    val cargoFormData = remember { data.value.cargoFormData }
+
     Column(
         modifier = Modifier
             .width(600.dp)
@@ -39,21 +56,25 @@ fun RequestForm(
             .verticalScroll(rememberScrollState())
             .padding(MaterialTheme.paddings.large)
     ) {
-        AddressSection()
+        AddressSection(originAddressFormData, destinationAddressFormData)
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
-        CargoForm()
+        CargoForm(cargoFormData)
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
         ButtonsSection(onCancelClick, onCreateClick)
     }
 }
 
+@ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
 @Preview
-fun AddressSection() {
-    AddressForm("Origin Address")
+fun AddressSection(
+    originAddressFormData: MutableState<AddressFormData>,
+    destinationAddressFormData: MutableState<AddressFormData>,
+) {
+    AddressForm(label = "Origin Address", originAddressFormData)
     Spacer(Modifier.height(MaterialTheme.spacers.medium))
-    AddressForm("Destination Address")
+    AddressForm(label = "Destination Address", destinationAddressFormData)
 }
 
 @Composable

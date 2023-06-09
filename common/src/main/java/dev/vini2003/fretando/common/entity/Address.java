@@ -18,6 +18,16 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Address(String street, String number, String city, String state, String postalCode, String country, String notes) {
+        this.street = street;
+        this.number = number;
+        this.city = city;
+        this.state = state;
+        this.postalCode = postalCode;
+        this.country = country;
+        this.notes = notes;
+    }
+
     private String street;
     private String number;
     private String city;

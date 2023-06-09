@@ -39,11 +39,11 @@ public class Mock {
         return new Cargo(
                 FAKER.random().nextLong(),
                 FAKER.number().randomDouble(2, 1, 100),
-                Cargo.LengthUnit.METERS,
+                Cargo.DimensionUnit.METERS,
                 FAKER.number().randomDouble(2, 1, 100),
-                Cargo.LengthUnit.METERS,
+                Cargo.DimensionUnit.METERS,
                 FAKER.number().randomDouble(2, 1, 100),
-                Cargo.LengthUnit.METERS,
+                Cargo.DimensionUnit.METERS,
                 FAKER.number().randomDouble(2, 1, 100),
                 Cargo.WeightUnit.KILOGRAMS,
                 FAKER.lorem().sentence()
