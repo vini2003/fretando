@@ -31,7 +31,12 @@ import dev.vini2003.fretando.client.ui.theme.spacers
 @ExperimentalComposeUiApi
 @Composable
 fun SidebarContent(mainContentComposable: MutableState<@Composable () -> Unit>) {
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(top = MaterialTheme.paddings.medium, end = MaterialTheme.paddings.medium)
+    ) {
         SidebarContentItem(0, Icons.Default.Person, "My Profile") {
             // TODO!
         }
@@ -53,7 +58,7 @@ fun SidebarContent(mainContentComposable: MutableState<@Composable () -> Unit>) 
 fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = androidx.compose.ui.Modifier
+        modifier = Modifier
             .height(64.dp)
             .fillMaxWidth()
             .padding(MaterialTheme.paddings.verySmall)
@@ -71,7 +76,7 @@ fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: ()
             text = label,
             modifier = Modifier.padding(horizontal = 8.dp).wrapContentSize(Alignment.CenterStart),
             style = MaterialTheme.typography.bodySmall.copy(
-                color = if (index % 2 == 0) Color.White.copy(alpha = 0.9F) else Color.White,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )

@@ -61,7 +61,7 @@ fun BidCard(
                 )
             }
 
-            val lowestBid = request.bids.minByOrNull { it.amount }
+            val lowestBid = request.bids?.minByOrNull { it.amount }
 
             if (lowestBid != null && lowestBid != bid) {
                 Row(
@@ -153,9 +153,9 @@ fun BidCard(
                             },
                             modifier = Modifier
                                 .padding(MaterialTheme.paddings.small),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                         ) {
-                            Text("Edit", color = MaterialTheme.colorScheme.onTertiary, fontWeight = FontWeight.Bold)
+                            Text("Edit", color = MaterialTheme.colorScheme.onSecondary, fontWeight = FontWeight.Bold)
                         }
                     }
 

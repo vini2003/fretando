@@ -55,6 +55,7 @@ fun Application() {
                             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
                         )
                     },
+                    colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                     navigationIcon = {
                         IconButton(onClick = { /* doSomething() */ }, modifier = Modifier.padding(start = 12.dp)) {
                             Icon(
@@ -79,7 +80,7 @@ fun Application() {
                         modifier = Modifier
                             .width(200.dp)
                             .fillMaxHeight()
-                            .background(MaterialTheme.colorScheme.surface) // change to your desired purple color
+                            .background(MaterialTheme.colorScheme.background) // change to your desired purple color
                             .padding(start = MaterialTheme.paddings.medium)
                     ) {
                         SidebarContent(selectedMainContent)

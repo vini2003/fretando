@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -19,11 +20,15 @@ import dev.vini2003.fretando.common.entity.Bid
 import dev.vini2003.fretando.common.entity.Request
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun RequestCard(
     request: Request,
-    onRemoveClick: () -> Unit = {}
+    onRemoveClick: () -> Unit = {},
+    showBidButton: Boolean = true,
+    showEditButton: Boolean = true,
+    showRemoveButton: Boolean = true
 ) {
     val scope = rememberCoroutineScope()
 
@@ -104,64 +109,102 @@ fun RequestCard(
 
             CargoBlock(cargo = request.cargo, modifier = Modifier.fillMaxWidth())
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.tertiaryContainer),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                val addPopup = LocalAddPopup.current
-                val removePopup = LocalRemovePopup.current
-
-                Button(
-                    onClick = {
-                        addPopup { id ->
-                            val bidFormData = remember {
-                                mutableStateOf(
-                                    BidFormData()
-                                )
-                            }
-
-                            BidForm(
-                                request.id,
-                                data = bidFormData,
-                                onCancelClick = {
-                                    removePopup(id)
-                                },
-                                onBidClick = {
-                                    if (bidFormData.value.validate()) {
-                                        scope.launch {
-                                            val bid = Bid(
-                                                request.id,
-                                                bidFormData.value.amount.value.toDouble(),
-                                            )
-
-                                            request.bids.plusAssign(bid)
-
-                                            RemoteRequestRepository.save(request)
-
-                                            removePopup(id)
-                                        }
-                                    }
-                                })
-                        }
-                    },
-                    modifier = Modifier.padding(MaterialTheme.paddings.small),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
-                ) {
-                    Text("Bid", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiary)
-                }
-
-                Button(
-                    onClick = {
-                        onRemoveClick()
-                    },
+            if (showRemoveButton || showEditButton || showBidButton) {
+                Row(
                     modifier = Modifier
-                        .padding(MaterialTheme.paddings.small),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.tertiaryContainer),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("✕", color = MaterialTheme.colorScheme.onErrorContainer, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
+                    val addPopup = LocalAddPopup.current
+                    val removePopup = LocalRemovePopup.current
+
+                    if (showBidButton) {
+                        Button(
+                            onClick = {
+                                addPopup { id ->
+                                    val bidFormData = remember {
+                                        mutableStateOf(
+                                            BidFormData()
+                                        )
+                                    }
+
+                                    BidForm(
+                                        request.id,
+                                        data = bidFormData,
+                                        onCancelClick = {
+                                            removePopup(id)
+                                        },
+                                        onBidClick = {
+                                            if (bidFormData.value.validate()) {
+                                                scope.launch {
+                                                    val bid = Bid(
+                                                        request.id,
+                                                        bidFormData.value.amount.value.toDouble(),
+                                                    )
+
+                                                    request.bids.plusAssign(bid)
+
+                                                    RemoteRequestRepository.save(request)
+
+                                                    removePopup(id)
+                                                }
+                                            }
+                                        })
+                                }
+                            },
+                            modifier = Modifier.padding(MaterialTheme.paddings.small),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+                        ) {
+                            Text("Bid", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiary)
+                        }
+                    }
+
+                    if (showEditButton) {
+                        Button(
+                            onClick = {
+                                addPopup { id ->
+                                    val requestFormData = remember {
+                                        mutableStateOf(
+                                            RequestFormData()
+                                        )
+                                    }
+
+                                    RequestForm(
+                                        data = requestFormData,
+                                        onCancelClick = {
+                                            removePopup(id)
+                                        },
+                                        onCreateClick = {
+                                            // TODO!
+                                        })
+                                }
+                            },
+                            modifier = Modifier.padding(MaterialTheme.paddings.small),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                        ) {
+                            Text("Edit", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSecondary)
+                        }
+                    }
+
+                    if (showRemoveButton) {
+                        Button(
+                            onClick = {
+                                onRemoveClick()
+                            },
+                            modifier = Modifier
+                                .padding(MaterialTheme.paddings.small),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                        ) {
+                            Text(
+                                "✕",
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
             }
         }
