@@ -74,7 +74,16 @@ fun RequestCardList() {
             ) {
                 if (requestPages.isNotEmpty() && requestPages.size > pageIndex && requestPages[pageIndex].isNotEmpty()) {
                     items(requestPages[pageIndex]) { request ->
-                        RequestCard(request = request)
+                        RequestCard(
+                            request = request,
+                            onRemoveClick = {
+                                scope.launch {
+                                    RemoteRequestRepository.deleteById(request.id)
+
+                                    requestPages = RemoteRequestRepository.findAll().chunked(20)
+                                }
+                            }
+                        )
                     }
                 }
             }

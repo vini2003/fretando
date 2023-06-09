@@ -19,7 +19,10 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun BidCard(
     bid: Bid,
-    onRemoveClick: () -> Unit = {}
+    onRemoveClick: () -> Unit = {},
+    showRequestButton: Boolean = true,
+    showEditButton: Boolean = true,
+    showRemoveButton: Boolean = true
 ) {
     Card(
         modifier = Modifier
@@ -64,21 +67,21 @@ fun BidCard(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.tertiaryContainer),
+                        .background(MaterialTheme.colorScheme.errorContainer),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "Lowest bid",
-                        color = MaterialTheme.colorScheme.onTertiaryContainer,
-                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(MaterialTheme.paddings.medium)
                     )
 
                     Text(
                         text = "$${"%,.2f".format(request.bids.minBy { it.amount }.amount)}",
-                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(MaterialTheme.paddings.medium)
@@ -86,21 +89,30 @@ fun BidCard(
                 }
             }
 
-            AddressBlock(
-                title = "Origin",
-                address = request.origin,
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-            )
+                    .background(MaterialTheme.colorScheme.secondaryContainer),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                AddressBlock(
+                    title = "Origin",
+                    address = request.origin,
+                    modifier = Modifier
+                        .weight(1f) // To make sure they share the available space
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                )
 
-            AddressBlock(
-                title = "Destination",
-                address = request.destination,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-            )
+                Spacer(Modifier.width(16.dp)) // Adding a space between the two blocks for better readability
+
+                AddressBlock(
+                    title = "Destination",
+                    address = request.destination,
+                    modifier = Modifier
+                        .weight(1f) // To make sure they share the available space
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                )
+            }
 
             CargoBlock(
                 cargo = request.cargo,
@@ -109,48 +121,61 @@ fun BidCard(
                     .background(MaterialTheme.colorScheme.primaryContainer)
             )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.secondaryContainer),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    onClick = {
-                        addPopup { id ->
-                            RequestCard(request = request)
+            if (showRemoveButton || showEditButton || showRequestButton) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.tertiaryContainer),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (showRequestButton) {
+                        Button(
+                            onClick = {
+                                addPopup { id ->
+                                    RequestCard(request = request)
+                                }
+                            },
+                            modifier = Modifier
+                                .padding(MaterialTheme.paddings.small),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+                        ) {
+                            Text("Request", color = MaterialTheme.colorScheme.onTertiary, fontWeight = FontWeight.Bold)
                         }
-                    },
-                    modifier = Modifier
-                        .padding(MaterialTheme.paddings.small),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-                ) {
-                    Text("Request", color = MaterialTheme.colorScheme.onPrimaryContainer)
-                }
+                    }
 
-                Button(
-                    onClick = {
-                        addPopup { id ->
-                            BidForm(requestId = request.id)
+                    if (showEditButton) {
+                        Button(
+                            onClick = {
+                                addPopup { id ->
+                                    BidForm(requestId = request.id)
+                                }
+                            },
+                            modifier = Modifier
+                                .padding(MaterialTheme.paddings.small),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+                        ) {
+                            Text("Edit", color = MaterialTheme.colorScheme.onTertiary, fontWeight = FontWeight.Bold)
                         }
-                    },
-                    modifier = Modifier
-                        .padding(MaterialTheme.paddings.small),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
-                ) {
-                    Text("Edit", color = MaterialTheme.colorScheme.onTertiaryContainer)
-                }
+                    }
 
-                Button(
-                    onClick = {
-                        onRemoveClick()
-                    },
-                    modifier = Modifier
-                        .padding(MaterialTheme.paddings.small),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
-                ) {
-                    Text("X", color = MaterialTheme.colorScheme.onErrorContainer, textAlign = TextAlign.Center)
+                    if (showRemoveButton) {
+                        Button(
+                            onClick = {
+                                onRemoveClick()
+                            },
+                            modifier = Modifier
+                                .padding(MaterialTheme.paddings.small),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                        ) {
+                            Text(
+                                "✕",
+                                color = MaterialTheme.colorScheme.onErrorContainer,
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
                 }
             }
         }

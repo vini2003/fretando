@@ -1,19 +1,14 @@
 package dev.vini2003.fretando.client.ui.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
 import dev.vini2003.fretando.common.entity.Cargo
@@ -22,18 +17,18 @@ import dev.vini2003.fretando.common.entity.Cargo
 fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(MaterialTheme.paddings.small)
     ) {
         Text(
             text = "Cargo",
             style = MaterialTheme.typography.titleSmall.copy(
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             ),
             modifier = Modifier
                 .clip(MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.tertiaryContainer)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(MaterialTheme.paddings.small)
         )
         Spacer(Modifier.height(MaterialTheme.spacers.verySmall))
@@ -42,47 +37,57 @@ fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )
+
         Spacer(Modifier.height(MaterialTheme.spacers.large))
-        Text(
-            text = AnnotatedString.Builder().apply {
-                withStyle(
-                    style = SpanStyle(fontWeight = FontWeight.Bold)
-                ) {
-                    append("%,.2f".format(cargo.length) + cargo.lengthUnit.asString())
-                }
-                append(" x ")
-                withStyle(
-                    style = SpanStyle(fontWeight = FontWeight.Bold)
-                ) {
-                    append("%,.2f".format(cargo.width) + cargo.widthUnit.asString())
-                }
-                append(" x ")
-                withStyle(
-                    style = SpanStyle(fontWeight = FontWeight.Bold)
-                ) {
-                    append("%,.2f".format(cargo.height) + cargo.heightUnit.asString())
-                }
-            }.toAnnotatedString(),
-            style = MaterialTheme.typography.titleSmall.copy(
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            ),
+
+        Row(
             modifier = Modifier
                 .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.secondaryContainer)
-                .padding(MaterialTheme.paddings.small)
-        )
-        Spacer(Modifier.height(MaterialTheme.spacers.small))
-        Text(
-            text = "%,.2f".format(cargo.weight) + cargo.weightUnit.asString(),
-            style = MaterialTheme.typography.titleSmall.copy(
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            ),
+                .padding(horizontal = MaterialTheme.paddings.small),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Weight: ",
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            )
+            Spacer(Modifier.weight(1f))
+            Text(
+                text = "%,.2f".format(cargo.weight) + cargo.weightUnit.asString(),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            )
+        }
+
+        Spacer(Modifier.height(4.dp))  // Space between the two rows
+
+        Row(
             modifier = Modifier
                 .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.secondaryContainer)
-                .padding(MaterialTheme.paddings.small)
-        )
+                .padding(horizontal = MaterialTheme.paddings.small),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Dimensions: ",
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            )
+            Spacer(Modifier.weight(1f))
+            Text(
+                text = "%,.2f".format(cargo.length) + cargo.lengthUnit.asString() + " ✕ " +
+                        "%,.2f".format(cargo.width) + cargo.widthUnit.asString() + " ✕ " +
+                        "%,.2f".format(cargo.height) + cargo.heightUnit.asString(),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                ),
+            )
+        }
     }
 }

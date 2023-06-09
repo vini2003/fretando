@@ -11,42 +11,48 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.ui.theme.paddings
-import dev.vini2003.fretando.client.ui.theme.spacers
 import dev.vini2003.fretando.common.entity.Address
 
 @Composable
 fun AddressBlock(title: String, address: Address, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(MaterialTheme.paddings.small)
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall.copy(
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onTertiaryContainer
+                color = MaterialTheme.colorScheme.onSecondaryContainer
             ),
             modifier = Modifier
                 .clip(MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.tertiaryContainer)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .padding(MaterialTheme.paddings.small)
         )
-        Spacer(Modifier.height(MaterialTheme.spacers.verySmall))
+        Spacer(Modifier.height(2.dp))
         Text(
             text = "${address.street}, ${address.number}",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )
         Text(
             text = "${address.city}, ${address.state}",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )
         Text(
             text = "${address.postalCode}, ${address.country}",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )
     }
