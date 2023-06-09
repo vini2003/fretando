@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -20,6 +17,8 @@ import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.sizes
 import dev.vini2003.fretando.client.ui.theme.spacers
 import dev.vini2003.fretando.common.entity.Cargo
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 data class CargoFormData(
     val length: MutableState<String> = mutableStateOf(""),
@@ -112,6 +111,8 @@ data class CargoFormData(
 fun CargoForm(
     data: MutableState<CargoFormData> = mutableStateOf(CargoFormData()),
 ) {
+    val scope = rememberCoroutineScope()
+
     // Create FocusRequesters for each TextField
     val focusRequesters = remember { List(5) { FocusRequester() } }
 
@@ -165,6 +166,20 @@ fun CargoForm(
                     CustomTextField(
                         value = length,
                         error = lengthError,
+                        isValueAllowed = { newValue ->
+                            if (newValue.matches(Regex("^\\d*(,\\d*)*(\\.\\d{0,2})?$"))) {
+                                true
+                            } else {
+                                lengthError.value = "Invalid"
+
+                                scope.launch {
+                                    delay(2000)
+                                    lengthError.value = null
+                                }
+
+                                false
+                            }
+                        },
                         label = "Length",
                         modifier = Modifier
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
@@ -180,6 +195,20 @@ fun CargoForm(
                     CustomTextField(
                         value = width,
                         error = widthError,
+                        isValueAllowed = { newValue ->
+                            if (newValue.matches(Regex("^\\d*(,\\d*)*(\\.\\d{0,2})?$"))) {
+                                true
+                            } else {
+                                widthError.value = "Invalid"
+
+                                scope.launch {
+                                    delay(2000)
+                                    widthError.value = null
+                                }
+
+                                false
+                            }
+                        },
                         label = "Width",
                         modifier = Modifier
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
@@ -195,6 +224,20 @@ fun CargoForm(
                     CustomTextField(
                         value = height,
                         error = heightError,
+                        isValueAllowed = { newValue ->
+                            if (newValue.matches(Regex("^\\d*(,\\d*)*(\\.\\d{0,2})?$"))) {
+                                true
+                            } else {
+                                heightError.value = "Invalid"
+
+                                scope.launch {
+                                    delay(2000)
+                                    heightError.value = null
+                                }
+
+                                false
+                            }
+                        },
                         label = "Height",
                         modifier = Modifier
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
@@ -212,6 +255,20 @@ fun CargoForm(
                     CustomTextField(
                         value = weight,
                         error = weightError,
+                        isValueAllowed = { newValue ->
+                            if (newValue.matches(Regex("^\\d*(,\\d*)*(\\.\\d{0,2})?$"))) {
+                                true
+                            } else {
+                                weightError.value = "Invalid"
+
+                                scope.launch {
+                                    delay(2000)
+                                    weightError.value = null
+                                }
+
+                                false
+                            }
+                        },
                         label = "Weight",
                         modifier = Modifier
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)

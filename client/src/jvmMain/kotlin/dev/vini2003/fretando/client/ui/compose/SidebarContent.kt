@@ -9,10 +9,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pages
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.RequestPage
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -25,24 +27,25 @@ import androidx.compose.ui.unit.sp
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
 
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
 @Composable
-fun SidebarContent() {
-    val addPopup = LocalAddPopup.current
-    val removePopup = LocalRemovePopup.current
-
+fun SidebarContent(mainContentComposable: MutableState<@Composable () -> Unit>) {
     Column {
         SidebarContentItem(0, Icons.Default.Person, "My Profile") {
-
+            // TODO!
         }
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
         SidebarContentItem(3, Icons.Default.Pages, "My Requests") {
-
+            mainContentComposable.value = { RequestCardList() }
         }
-        SidebarContentItem(4, Icons.Default.RequestPage, "My Offers") {
-
+        SidebarContentItem(4, Icons.Default.RequestPage, "My Bids") {
+            mainContentComposable.value = { BidCardList() }
         }
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
-        SidebarContentItem(1, Icons.Default.Pages, "Requests") { /* doSomething() */ }
+        SidebarContentItem(1, Icons.Default.Pages, "Requests") {
+            // TODO!
+        }
     }
 }
 
