@@ -14,10 +14,35 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+data class BidFormData(
+    val amount: MutableState<String> = mutableStateOf(""),
+    val amountError: MutableState<String?> = mutableStateOf(null),
+) {
+    fun validate(): Boolean {
+        var valid = true
+
+        if (amount.value.isEmpty()) {
+            amountError.value = "Amount is required"
+            valid = false
+        } else {
+            amountError.value = null
+        }
+
+        if (!amount.value.matches(Regex("^\\d*(,\\d*)*(\\.\\d{0,2})?$"))) {
+            amountError.value = "Amount is invalid"
+            valid = false
+        } else {
+            amountError.value = null
+        }
+
+        return valid
+    }
+}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterial3Api
@@ -27,9 +52,10 @@ fun BidForm(
     requestId: Long,
     onCancelClick: () -> Unit = {},
     onBidClick: (String) -> Unit = {},
+    data: MutableState<BidFormData> = mutableStateOf(BidFormData())
 ) {
-    val amount = remember { mutableStateOf("") }
-    val amountError = remember { mutableStateOf<String?>(null) }
+    val amount = remember { data.value.amount }
+    val amountError = remember { data.value.amountError }
 
     Column(
         modifier = Modifier

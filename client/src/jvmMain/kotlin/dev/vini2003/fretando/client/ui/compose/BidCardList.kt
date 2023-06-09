@@ -15,6 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteBidRepository
+import dev.vini2003.fretando.client.repository.RemoteRequestRepository
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
 import kotlinx.coroutines.launch
@@ -63,7 +64,22 @@ fun BidCardList() {
             ) {
                 if (bidPages.isNotEmpty() && bidPages.size > pageIndex && bidPages[pageIndex].isNotEmpty()) {
                     items(bidPages[pageIndex]) { bid ->
-                        BidCard(bid = bid)
+                        BidCard(
+                            bid = bid,
+                            onRemoveClick = {
+                                scope.launch {
+                                    val request = RemoteRequestRepository.findById(bid.requestId)
+
+                                    request.bids.minusAssign(bid)
+
+                                    RemoteRequestRepository.save(request)
+
+                                    RemoteBidRepository.deleteById(bid.id)
+
+                                    bidPages = RemoteBidRepository.findAll().chunked(20)
+                                }
+                            }
+                        )
                     }
                 }
             }

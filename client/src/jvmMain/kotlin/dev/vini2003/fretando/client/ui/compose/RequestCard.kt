@@ -5,16 +5,24 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import dev.vini2003.fretando.client.repository.RemoteRequestRepository
 import dev.vini2003.fretando.client.ui.theme.paddings
+import dev.vini2003.fretando.common.entity.Bid
 import dev.vini2003.fretando.common.entity.Request
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
 @Composable
 fun RequestCard(request: Request) {
+    val scope = rememberCoroutineScope()
+
     Card(
         modifier = Modifier
             .padding(MaterialTheme.paddings.medium),
@@ -40,13 +48,33 @@ fun RequestCard(request: Request) {
                 Button(
                     onClick = {
                         addPopup { id ->
+                            val bidFormData = remember {
+                                mutableStateOf(
+                                    BidFormData()
+                                )
+                            }
+
                             BidForm(
                                 request.id,
+                                data = bidFormData,
                                 onCancelClick = {
                                     removePopup(id)
                                 },
                                 onBidClick = {
-                                    removePopup(id)
+                                    if (bidFormData.value.validate()) {
+                                        scope.launch {
+                                            val bid = Bid(
+                                                request.id,
+                                                bidFormData.value.amount.value.toDouble(),
+                                            )
+
+                                            request.bids.plusAssign(bid)
+
+                                            RemoteRequestRepository.save(request)
+
+                                            removePopup(id)
+                                        }
+                                    }
                                 })
                         }
                     },

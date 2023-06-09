@@ -143,9 +143,9 @@ fun RequestCardList() {
                                     RemoteRequestRepository.save(request)
 
                                     requestPages = RemoteRequestRepository.findAll().chunked(20)
-                                }
 
-                                removePopup(id)
+                                    removePopup(id)
+                                }
                             }
                         }
                     )
