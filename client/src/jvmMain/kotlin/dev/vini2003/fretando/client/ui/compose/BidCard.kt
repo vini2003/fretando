@@ -37,21 +37,21 @@ fun BidCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.secondaryContainer),
+                    .background(MaterialTheme.colorScheme.primary),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "Your bid",
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(MaterialTheme.paddings.medium)
                 )
 
                 Text(
-                    text = "$${bid.amount}",
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    text = "$${"%,.2f".format(bid.amount)}",
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(MaterialTheme.paddings.medium)
@@ -77,7 +77,7 @@ fun BidCard(
                     )
 
                     Text(
-                        text = "$${request.bids.minBy { it.amount }.amount}",
+                        text = "$${"%,.2f".format(request.bids.minBy { it.amount }.amount)}",
                         color = MaterialTheme.colorScheme.onTertiaryContainer,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall,
@@ -86,10 +86,33 @@ fun BidCard(
                 }
             }
 
+            AddressBlock(
+                title = "Origin",
+                address = request.origin,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+            )
+
+            AddressBlock(
+                title = "Destination",
+                address = request.destination,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+            )
+
+            CargoBlock(
+                cargo = request.cargo,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+            )
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary),
+                    .background(MaterialTheme.colorScheme.secondaryContainer),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

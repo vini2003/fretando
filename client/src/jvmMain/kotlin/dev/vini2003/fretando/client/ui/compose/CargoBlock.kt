@@ -14,9 +14,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import dev.vini2003.fretando.common.entity.Cargo
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
+import dev.vini2003.fretando.common.entity.Cargo
 
 @Composable
 fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
@@ -48,19 +48,19 @@ fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
                 withStyle(
                     style = SpanStyle(fontWeight = FontWeight.Bold)
                 ) {
-                    append("${cargo.length}" + cargo.lengthUnit.asString())
+                    append("%,.2f".format(cargo.length) + cargo.lengthUnit.asString())
                 }
                 append(" x ")
                 withStyle(
                     style = SpanStyle(fontWeight = FontWeight.Bold)
                 ) {
-                    append("${cargo.width}" + cargo.widthUnit.asString())
+                    append("%,.2f".format(cargo.width) + cargo.widthUnit.asString())
                 }
                 append(" x ")
                 withStyle(
                     style = SpanStyle(fontWeight = FontWeight.Bold)
                 ) {
-                    append("${cargo.height}" + cargo.heightUnit.asString())
+                    append("%,.2f".format(cargo.height) + cargo.heightUnit.asString())
                 }
             }.toAnnotatedString(),
             style = MaterialTheme.typography.titleSmall.copy(
@@ -74,7 +74,7 @@ fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
         )
         Spacer(Modifier.height(MaterialTheme.spacers.small))
         Text(
-            text = "${cargo.weight}" + cargo.weightUnit.asString(),
+            text = "%,.2f".format(cargo.weight) + cargo.weightUnit.asString(),
             style = MaterialTheme.typography.titleSmall.copy(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSecondaryContainer

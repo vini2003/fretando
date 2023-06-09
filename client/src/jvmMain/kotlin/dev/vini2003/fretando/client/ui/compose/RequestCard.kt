@@ -86,7 +86,7 @@ fun RequestCard(request: Request) {
 
                 if (lowestBid != null) {
                     Text(
-                        text = "$${lowestBid?.amount}",
+                        text = "$${"%,.2f".format(lowestBid.amount)}",
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall,
