@@ -38,7 +38,7 @@ public class BidController {
     public ResponseEntity<Bid> updateBid(@PathVariable Long id, @RequestBody Bid bidDetails){
         var bid = bidRepository.findById(id).orElseThrow(() -> new RuntimeException("Bid not exists with id:" + id));
 
-        bid.setRequestId(bidDetails.getRequestId());
+        bid.setRequest(bidDetails.getRequest()); // TODO: Can we do this?!
         bid.setAmount(bidDetails.getAmount());
 
         Bid updatedBid = bidRepository.save(bid);

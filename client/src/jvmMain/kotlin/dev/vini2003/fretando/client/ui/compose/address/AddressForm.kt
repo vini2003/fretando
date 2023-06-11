@@ -149,8 +149,8 @@ fun AddressForm(
                                 dropdownMenuTextFieldSize = coordinates.size.toSize()
                             }
                             .focusRequester(focusRequesters[5])
-                            .onKeyEvent { keyEvent ->
-                                if (keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyUp) {
+                            .onPreviewKeyEvent { keyEvent ->
+                                if (keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyDown) {
                                     focusRequesters[6].requestFocus()
                                     true
                                 } else {

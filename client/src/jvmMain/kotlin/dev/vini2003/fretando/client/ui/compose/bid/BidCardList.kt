@@ -16,7 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteBidRepository
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
+import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
+import dev.vini2003.fretando.client.ui.compose.LocalRemovePopup
+import dev.vini2003.fretando.client.ui.compose.data.BidFormData
 import dev.vini2003.fretando.client.ui.compose.misc.Paginator
+import dev.vini2003.fretando.client.ui.compose.request.RequestCard
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
 import kotlinx.coroutines.launch
@@ -40,6 +44,9 @@ fun BidCardList() {
             }
         )
     }
+
+    val addPopup = LocalAddPopup.current
+    val removePopup = LocalRemovePopup.current
 
     Box(
         modifier = Modifier
@@ -67,9 +74,34 @@ fun BidCardList() {
                     items(bidPages[pageIndex]) { bid ->
                         BidCard(
                             bid = bid,
+                            onEditClick = {
+                                addPopup { popup ->
+                                    val bidFormData = remember {
+                                        mutableStateOf(
+                                            BidFormData(bid = bid)
+                                        )
+                                    }
+
+                                    BidForm(
+                                        data = bidFormData,
+                                        onCancelClick = { removePopup(popup) },
+                                        onConfirmClick = {
+                                            scope.launch {
+                                                val newBid = bidFormData.value.toBid()
+
+                                                RemoteBidRepository.update(bid.id, newBid)
+
+                                                removePopup(popup)
+
+                                                bidPages = RemoteBidRepository.findAll().chunked(20)
+                                            }
+                                        },
+                                    )
+                                }
+                            },
                             onDeleteClick = {
                                 scope.launch {
-                                    val request = RemoteRequestRepository.findById(bid.requestId)
+                                    val request = bid.request // TODO: Check if working! Used to be "requestId".
 
                                     request.bids.minusAssign(bid)
 
@@ -78,6 +110,20 @@ fun BidCardList() {
                                     RemoteBidRepository.deleteById(bid.id)
 
                                     bidPages = RemoteBidRepository.findAll().chunked(20)
+                                }
+                            },
+                            onRequestClick = {
+                                scope.launch {
+                                    val request = bid.request // TODO: Check if working! Used to be "requestId".
+
+                                    addPopup {
+                                        RequestCard(
+                                            request = request,
+                                            enableBid = false,
+                                            enableEdit = false,
+                                            enableRemove = false
+                                        )
+                                    }
                                 }
                             }
                         )

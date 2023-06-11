@@ -30,7 +30,6 @@ import dev.vini2003.fretando.client.ui.theme.spacers
 @Composable
 @Preview
 fun BidForm(
-    requestId: Long,
     onCancelClick: () -> Unit = {},
     onConfirmClick: (String) -> Unit = {},
     enableCancel: Boolean = true,

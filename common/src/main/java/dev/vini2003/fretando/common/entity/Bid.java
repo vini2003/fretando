@@ -1,13 +1,9 @@
 package dev.vini2003.fretando.common.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 
 @Entity
 @Data
@@ -18,16 +14,17 @@ public class Bid  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Bid(Long requestId, double amount) {
-        this.requestId = requestId;
+    public Bid(Request request, double amount) {
+        this.request = request;
         this.amount = amount;
     }
 
-    private Long requestId;
+    @ManyToOne
+    private Request request;
 
     private double amount;
 
     public boolean isComplete() {
-        return requestId != null && amount != 0;
+        return request != null && amount != 0;
     }
 }

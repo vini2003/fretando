@@ -2,6 +2,7 @@ package dev.vini2003.fretando.client.ui.compose.data
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import dev.vini2003.fretando.common.entity.Address
 
 data class AddressFormData(
     val street: MutableState<String> = mutableStateOf(""),
@@ -19,6 +20,28 @@ data class AddressFormData(
     val postalCodeError: MutableState<String?> = mutableStateOf(null),
     val countryError: MutableState<String?> = mutableStateOf(null),
 ) {
+    constructor(address: Address) : this() {
+        street.value = address.street
+        number.value = address.number
+        city.value = address.city
+        state.value = address.state
+        postalCode.value = address.postalCode
+        country.value = address.country
+        notes.value = address.notes
+    }
+
+    fun toAddress(): Address {
+        return Address(
+            street.value,
+            number.value,
+            city.value,
+            state.value,
+            postalCode.value,
+            country.value,
+            notes.value
+        )
+    }
+
     fun validate(): Boolean {
         var valid = true
 

@@ -29,8 +29,7 @@ public class Mock {
 
     public static Bid bid() {
         return new Bid(
-                FAKER.random().nextLong(),
-                FAKER.random().nextLong(),
+                request(),
                 FAKER.number().randomDouble(2, 1, 100)
         );
     }

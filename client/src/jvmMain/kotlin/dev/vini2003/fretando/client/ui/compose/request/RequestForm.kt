@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.ui.compose.address.AddressForm
 import dev.vini2003.fretando.client.ui.compose.button.CancelButton
+import dev.vini2003.fretando.client.ui.compose.button.ConfirmButton
 import dev.vini2003.fretando.client.ui.compose.button.CreateButton
 import dev.vini2003.fretando.client.ui.compose.cargo.CargoForm
 import dev.vini2003.fretando.client.ui.compose.data.AddressFormData
@@ -102,7 +103,7 @@ private fun ButtonSection(
         if (enableCreate) {
             CreateButton(onCreateClick = onCreateClick)
         } else if (enableConfirm) {
-            CreateButton(onCreateClick = onConfirmClick)
+            ConfirmButton(onConfirmClick = onConfirmClick)
         }
     }
 }

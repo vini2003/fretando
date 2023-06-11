@@ -39,7 +39,7 @@ fun CustomTextField(
                 ?: Text(label, style = TextStyle(fontSize = 14.sp))
         },
         modifier = modifier
-            .onKeyEvent { keyEvent ->
+            .onPreviewKeyEvent { keyEvent ->
                 if (nextFocusRequester != null && keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyDown) {
                     nextFocusRequester.requestFocus()
                     true // consume the event

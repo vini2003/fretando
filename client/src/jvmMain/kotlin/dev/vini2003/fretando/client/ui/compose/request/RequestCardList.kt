@@ -25,13 +25,12 @@ import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
 import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
 import dev.vini2003.fretando.client.ui.compose.LocalRemovePopup
-import dev.vini2003.fretando.client.ui.compose.misc.Paginator
+import dev.vini2003.fretando.client.ui.compose.bid.BidForm
+import dev.vini2003.fretando.client.ui.compose.data.BidFormData
 import dev.vini2003.fretando.client.ui.compose.data.RequestFormData
+import dev.vini2003.fretando.client.ui.compose.misc.Paginator
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
-import dev.vini2003.fretando.common.entity.Address
-import dev.vini2003.fretando.common.entity.Cargo
-import dev.vini2003.fretando.common.entity.Request
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -53,6 +52,9 @@ fun RequestCardList() {
             }
         )
     }
+
+    val addPopup = LocalAddPopup.current
+    val removePopup = LocalRemovePopup.current
 
     Box(
         modifier = Modifier
@@ -80,21 +82,78 @@ fun RequestCardList() {
                     items(requestPages[pageIndex]) { request ->
                         RequestCard(
                             request = request,
+                            onBidClick = {
+                                addPopup { id ->
+                                    val bidFormData = remember {
+                                        mutableStateOf(
+                                            BidFormData(request = mutableStateOf(request))
+                                        )
+                                    }
+
+                                    BidForm(
+                                        data = bidFormData,
+                                        onCancelClick = { removePopup(id) },
+                                        onConfirmClick = {
+                                            if (bidFormData.value.validate()) {
+                                                scope.launch {
+                                                    val bid = bidFormData.value.toBid()
+
+                                                    request.bids.plusAssign(bid)
+
+                                                    RemoteRequestRepository.save(request)
+
+                                                    requestPages = RemoteRequestRepository.findAll().chunked(20)
+
+                                                    removePopup(id)
+                                                }
+                                            }
+                                        })
+                                }
+                            },
+                            onEditClick = {
+                                addPopup { id ->
+                                    val requestFormData = remember {
+                                        mutableStateOf(
+                                            RequestFormData(request = request)
+                                        )
+                                    }
+
+                                    RequestForm(
+                                        data = requestFormData,
+                                        onCancelClick = {
+                                            removePopup(id)
+                                        },
+                                        onConfirmClick = {
+                                            if (requestFormData.value.validate()) {
+                                                scope.launch {
+                                                    val editedRequest = requestFormData.value.toRequest()
+                                                    editedRequest.bids = request.bids
+
+                                                    RemoteRequestRepository.update(request.id, editedRequest)
+
+                                                    requestPages = RemoteRequestRepository.findAll().chunked(20)
+
+                                                    removePopup(id)
+                                                }
+                                            }
+                                        },
+                                        enableCreate = false,
+                                        enableConfirm = true
+                                    )
+                                }
+                            },
                             onRemoveClick = {
                                 scope.launch {
                                     RemoteRequestRepository.deleteById(request.id)
 
                                     requestPages = RemoteRequestRepository.findAll().chunked(20)
                                 }
-                            }
+                            },
                         )
                     }
                 }
             }
         }
-
-        val addPopup = LocalAddPopup.current
-        val removePopup = LocalRemovePopup.current
 
         IconButton(
             onClick = {
@@ -113,45 +172,7 @@ fun RequestCardList() {
                         onCreateClick = {
                             if (requestFormData.value.validate()) {
                                 scope.launch {
-                                    val request = Request(
-                                        Address(
-                                            requestFormData.value.originAddressFormData.value.street.value,
-                                            requestFormData.value.originAddressFormData.value.number.value,
-                                            requestFormData.value.originAddressFormData.value.city.value,
-                                            requestFormData.value.originAddressFormData.value.state.value,
-                                            requestFormData.value.originAddressFormData.value.postalCode.value,
-                                            requestFormData.value.originAddressFormData.value.country.value,
-                                            requestFormData.value.originAddressFormData.value.notes.value,
-                                        ),
-                                        Address(
-                                            requestFormData.value.destinationAddressFormData.value.street.value,
-                                            requestFormData.value.destinationAddressFormData.value.number.value,
-                                            requestFormData.value.destinationAddressFormData.value.city.value,
-                                            requestFormData.value.destinationAddressFormData.value.state.value,
-                                            requestFormData.value.destinationAddressFormData.value.postalCode.value,
-                                            requestFormData.value.destinationAddressFormData.value.country.value,
-                                            requestFormData.value.destinationAddressFormData.value.notes.value,
-                                        ),
-                                        Cargo(
-                                            requestFormData.value.cargoFormData.value.length.value.toDouble(),
-                                            requestFormData.value.cargoFormData.value.lengthUnit.value.let {
-                                                Cargo.DimensionUnit.values().first { lengthUnit -> lengthUnit.asString() == it }
-                                            },
-                                            requestFormData.value.cargoFormData.value.width.value.toDouble(),
-                                            requestFormData.value.cargoFormData.value.widthUnit.value.let {
-                                                Cargo.DimensionUnit.values().first { widthUnit -> widthUnit.asString() == it }
-                                            },
-                                            requestFormData.value.cargoFormData.value.height.value.toDouble(),
-                                            requestFormData.value.cargoFormData.value.heightUnit.value.let {
-                                                Cargo.DimensionUnit.values().first { heightUnit -> heightUnit.asString() == it }
-                                            },
-                                            requestFormData.value.cargoFormData.value.weight.value.toDouble(),
-                                            requestFormData.value.cargoFormData.value.weightUnit.value.let {
-                                                Cargo.WeightUnit.values().first { weightUnit -> weightUnit.asString() == it }
-                                            },
-                                            requestFormData.value.cargoFormData.value.description.value
-                                        )
-                                    )
+                                    val request = requestFormData.value.toRequest()
 
                                     RemoteRequestRepository.save(request)
 

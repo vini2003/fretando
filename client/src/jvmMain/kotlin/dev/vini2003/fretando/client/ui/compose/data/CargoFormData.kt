@@ -20,6 +20,32 @@ data class CargoFormData(
     val description: MutableState<String> = mutableStateOf(""),
     val descriptionError: MutableState<String?> = mutableStateOf(null),
 ) {
+    constructor(cargo: Cargo) : this() {
+        length.value = cargo.length.toString()
+        lengthUnit.value = cargo.lengthUnit.asString()
+        width.value = cargo.width.toString()
+        widthUnit.value = cargo.widthUnit.asString()
+        height.value = cargo.height.toString()
+        heightUnit.value = cargo.heightUnit.asString()
+        weight.value = cargo.weight.toString()
+        weightUnit.value = cargo.weightUnit.asString()
+        description.value = cargo.description
+    }
+
+    fun toCargo(): Cargo {
+        return Cargo(
+            length.value.toDouble(),
+            Cargo.DimensionUnit.values().first { lengthUnit -> lengthUnit.asString() == this.lengthUnit.value },
+            width.value.toDouble(),
+            Cargo.DimensionUnit.values().first { lengthUnit -> lengthUnit.asString() == this.widthUnit.value },
+            height.value.toDouble(),
+            Cargo.DimensionUnit.values().first { lengthUnit -> lengthUnit.asString() == this.heightUnit.value },
+            weight.value.toDouble(),
+            Cargo.WeightUnit.values().first { lengthUnit -> lengthUnit.asString() == this.weightUnit.value },
+            description.value
+        )
+    }
+
     fun validate(): Boolean {
         var valid = true
 
@@ -33,8 +59,6 @@ data class CargoFormData(
         if (!Cargo.DimensionUnit.values().map { it.asString() }.contains(lengthUnit.value)) {
             lengthError.value = "Length unit is invalid"
             valid = false
-        } else {
-            lengthError.value = null
         }
 
         if (width.value.isEmpty()) {
@@ -47,8 +71,6 @@ data class CargoFormData(
         if (!Cargo.DimensionUnit.values().map { it.asString() }.contains(widthUnit.value)) {
             widthError.value = "Width unit is invalid"
             valid = false
-        } else {
-            widthError.value = null
         }
 
         if (height.value.isEmpty()) {
@@ -61,8 +83,6 @@ data class CargoFormData(
         if (!Cargo.DimensionUnit.values().map { it.asString() }.contains(heightUnit.value)) {
             heightError.value = "Height unit is invalid"
             valid = false
-        } else {
-            heightError.value = null
         }
 
         if (weight.value.isEmpty()) {
@@ -75,8 +95,6 @@ data class CargoFormData(
         if (!Cargo.WeightUnit.values().map { it.asString() }.contains(weightUnit.value)) {
             weightError.value = "Weight unit is invalid"
             valid = false
-        } else {
-            weightError.value = null
         }
 
         if (description.value.isEmpty()) {

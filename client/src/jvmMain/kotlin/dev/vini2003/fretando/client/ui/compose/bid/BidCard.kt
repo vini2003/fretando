@@ -11,8 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.client.repository.RemoteRequestRepository
-import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
 import dev.vini2003.fretando.client.ui.compose.address.AddressBlock
 import dev.vini2003.fretando.client.ui.compose.button.DeleteButton
 import dev.vini2003.fretando.client.ui.compose.button.EditButton
@@ -20,7 +18,6 @@ import dev.vini2003.fretando.client.ui.compose.button.RequestButton
 import dev.vini2003.fretando.client.ui.compose.cargo.CargoBlock
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.common.entity.Bid
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun BidCard(
@@ -34,18 +31,16 @@ fun BidCard(
 ) {
     if (!bid.isComplete) return
 
+    val request = bid.request ?: return
+
+    if (!request.isComplete) return
+
     Card(
         modifier = Modifier
             .padding(MaterialTheme.paddings.medium),
         shape = RoundedCornerShape(10.dp)
     ) {
         Column(modifier = Modifier.width(300.dp)) {
-            val addPopup = LocalAddPopup.current
-
-            val request = runBlocking {
-                RemoteRequestRepository.findById(bid.requestId)
-            }
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

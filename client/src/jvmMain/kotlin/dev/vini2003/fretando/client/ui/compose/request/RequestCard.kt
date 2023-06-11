@@ -3,39 +3,36 @@ package dev.vini2003.fretando.client.ui.compose.request
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.client.repository.RemoteRequestRepository
-import dev.vini2003.fretando.client.ui.compose.bid.BidForm
-import dev.vini2003.fretando.client.ui.compose.cargo.CargoBlock
-import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
-import dev.vini2003.fretando.client.ui.compose.LocalRemovePopup
 import dev.vini2003.fretando.client.ui.compose.address.AddressBlock
-import dev.vini2003.fretando.client.ui.compose.data.BidFormData
-import dev.vini2003.fretando.client.ui.compose.data.RequestFormData
+import dev.vini2003.fretando.client.ui.compose.button.BidButton
+import dev.vini2003.fretando.client.ui.compose.button.DeleteButton
+import dev.vini2003.fretando.client.ui.compose.button.EditButton
+import dev.vini2003.fretando.client.ui.compose.cargo.CargoBlock
 import dev.vini2003.fretando.client.ui.theme.paddings
-import dev.vini2003.fretando.common.entity.Bid
 import dev.vini2003.fretando.common.entity.Request
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun RequestCard(
     request: Request,
+    onBidClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
     onRemoveClick: () -> Unit = {},
-    showBidButton: Boolean = true,
-    showEditButton: Boolean = true,
-    showRemoveButton: Boolean = true
+    enableBid: Boolean = true,
+    enableEdit: Boolean = true,
+    enableRemove: Boolean = true
 ) {
     val scope = rememberCoroutineScope()
 
@@ -116,7 +113,7 @@ fun RequestCard(
 
             CargoBlock(cargo = request.cargo, modifier = Modifier.fillMaxWidth())
 
-            if (showRemoveButton || showEditButton || showBidButton) {
+            if (enableRemove || enableEdit || enableBid) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -124,93 +121,16 @@ fun RequestCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val addPopup = LocalAddPopup.current
-                    val removePopup = LocalRemovePopup.current
-
-                    if (showBidButton) {
-                        Button(
-                            onClick = {
-                                addPopup { id ->
-                                    val bidFormData = remember {
-                                        mutableStateOf(
-                                            BidFormData()
-                                        )
-                                    }
-
-                                    BidForm(
-                                        request.id,
-                                        data = bidFormData,
-                                        onCancelClick = {
-                                            removePopup(id)
-                                        },
-                                        onConfirmClick = {
-                                            if (bidFormData.value.validate()) {
-                                                scope.launch {
-                                                    val bid = Bid(
-                                                        request.id,
-                                                        bidFormData.value.amount.value.toDouble(),
-                                                    )
-
-                                                    request.bids.plusAssign(bid)
-
-                                                    RemoteRequestRepository.save(request)
-
-                                                    removePopup(id)
-                                                }
-                                            }
-                                        })
-                                }
-                            },
-                            modifier = Modifier.padding(MaterialTheme.paddings.small),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
-                        ) {
-                            Text("Bid", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onTertiary)
-                        }
+                    if (enableBid) {
+                        BidButton(onBidClick)
                     }
 
-                    if (showEditButton) {
-                        Button(
-                            onClick = {
-                                addPopup { id ->
-                                    val requestFormData = remember {
-                                        mutableStateOf(
-                                            RequestFormData()
-                                        )
-                                    }
-
-                                    RequestForm(
-                                        data = requestFormData,
-                                        onCancelClick = {
-                                            removePopup(id)
-                                        },
-                                        onCreateClick = {
-                                            // TODO!
-                                        })
-                                }
-                            },
-                            modifier = Modifier.padding(MaterialTheme.paddings.small),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                        ) {
-                            Text("Edit", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSecondary)
-                        }
+                    if (enableEdit) {
+                        EditButton(onEditClick)
                     }
 
-                    if (showRemoveButton) {
-                        Button(
-                            onClick = {
-                                onRemoveClick()
-                            },
-                            modifier = Modifier
-                                .padding(MaterialTheme.paddings.small),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
-                        ) {
-                            Text(
-                                "✕",
-                                color = MaterialTheme.colorScheme.onErrorContainer,
-                                textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                    if (enableRemove) {
+                        DeleteButton(onRemoveClick)
                     }
                 }
             }

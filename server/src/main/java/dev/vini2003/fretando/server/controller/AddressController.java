@@ -46,7 +46,8 @@ public class AddressController {
         address.setCountry(addressDetails.getCountry());
         address.setNotes(addressDetails.getNotes());
 
-        Address updatedAddress = addressRepository.save(address);
+        var updatedAddress = addressRepository.save(address);
+
         return ResponseEntity.ok(updatedAddress);
     }
 
