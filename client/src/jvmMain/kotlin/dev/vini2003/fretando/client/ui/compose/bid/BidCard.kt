@@ -1,28 +1,36 @@
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.bid
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
+import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
+import dev.vini2003.fretando.client.ui.compose.address.AddressBlock
+import dev.vini2003.fretando.client.ui.compose.button.DeleteButton
+import dev.vini2003.fretando.client.ui.compose.button.EditButton
+import dev.vini2003.fretando.client.ui.compose.button.RequestButton
+import dev.vini2003.fretando.client.ui.compose.cargo.CargoBlock
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.common.entity.Bid
 import kotlinx.coroutines.runBlocking
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BidCard(
     bid: Bid,
-    onRemoveClick: () -> Unit = {},
-    showRequestButton: Boolean = true,
-    showEditButton: Boolean = true,
-    showRemoveButton: Boolean = true
+    onRequestClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {},
+    enableRequest: Boolean = true,
+    enableEdit: Boolean = true,
+    enableDelete: Boolean = true
 ) {
     if (!bid.isComplete) return
 
@@ -33,7 +41,6 @@ fun BidCard(
     ) {
         Column(modifier = Modifier.width(300.dp)) {
             val addPopup = LocalAddPopup.current
-            val removePopup = LocalRemovePopup.current
 
             val request = runBlocking {
                 RemoteRequestRepository.findById(bid.requestId)
@@ -123,7 +130,7 @@ fun BidCard(
                     .background(MaterialTheme.colorScheme.primaryContainer)
             )
 
-            if (showRemoveButton || showEditButton || showRequestButton) {
+            if (enableDelete || enableEdit || enableRequest) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -131,55 +138,20 @@ fun BidCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (showRequestButton) {
-                        Button(
-                            onClick = {
-                                addPopup { id ->
-                                    RequestCard(request = request)
-                                }
-                            },
-                            modifier = Modifier
-                                .padding(MaterialTheme.paddings.small),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
-                        ) {
-                            Text("Request", color = MaterialTheme.colorScheme.onTertiary, fontWeight = FontWeight.Bold)
-                        }
+                    if (enableRequest) {
+                        RequestButton(onRequestClick)
                     }
 
-                    if (showEditButton) {
-                        Button(
-                            onClick = {
-                                addPopup { id ->
-                                    BidForm(requestId = request.id)
-                                }
-                            },
-                            modifier = Modifier
-                                .padding(MaterialTheme.paddings.small),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                        ) {
-                            Text("Edit", color = MaterialTheme.colorScheme.onSecondary, fontWeight = FontWeight.Bold)
-                        }
+                    if (enableEdit) {
+                        EditButton(onEditClick)
                     }
 
-                    if (showRemoveButton) {
-                        Button(
-                            onClick = {
-                                onRemoveClick()
-                            },
-                            modifier = Modifier
-                                .padding(MaterialTheme.paddings.small),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer)
-                        ) {
-                            Text(
-                                "✕",
-                                color = MaterialTheme.colorScheme.onErrorContainer,
-                                textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                    if (enableDelete) {
+                        DeleteButton(onDeleteClick)
                     }
                 }
             }
         }
     }
 }
+

@@ -1,4 +1,4 @@
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.content
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api

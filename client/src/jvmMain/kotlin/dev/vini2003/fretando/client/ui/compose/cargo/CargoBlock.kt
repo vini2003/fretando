@@ -1,4 +1,4 @@
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.cargo
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,7 +14,10 @@ import dev.vini2003.fretando.client.ui.theme.spacers
 import dev.vini2003.fretando.common.entity.Cargo
 
 @Composable
-fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
+fun CargoBlock(
+    cargo: Cargo,
+    modifier: Modifier = Modifier
+) {
     if (!cargo.isComplete) return
 
     Column(

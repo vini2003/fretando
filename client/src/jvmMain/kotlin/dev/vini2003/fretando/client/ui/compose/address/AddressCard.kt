@@ -1,4 +1,4 @@
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.address
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,13 +7,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.common.entity.Address
 import dev.vini2003.fretando.client.ui.theme.paddings
+import dev.vini2003.fretando.common.entity.Address
 
 @Composable
-fun AddressCard(address: Address) {
+fun AddressCard(
+    address: Address,
+    modifier: Modifier = Modifier
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(MaterialTheme.paddings.medium),
         shape = RoundedCornerShape(10.dp)
     ) {

@@ -18,6 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.PopupComposable
+import dev.vini2003.fretando.client.ui.compose.content.MainContent
+import dev.vini2003.fretando.client.ui.compose.content.SidebarContent
+import dev.vini2003.fretando.client.ui.compose.request.RequestCardList
 import dev.vini2003.fretando.client.ui.theme.AppTheme
 import dev.vini2003.fretando.client.ui.theme.paddings
 

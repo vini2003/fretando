@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.address
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,102 +25,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import dev.vini2003.fretando.client.ui.compose.data.AddressFormData
+import dev.vini2003.fretando.client.ui.compose.text.CustomTextField
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.sizes
 import dev.vini2003.fretando.client.ui.theme.spacers
 import dev.vini2003.fretando.client.util.misc.Countries
-
-data class AddressFormData(
-    val street: MutableState<String> = mutableStateOf(""),
-    val number: MutableState<String> = mutableStateOf(""),
-    val city: MutableState<String> = mutableStateOf(""),
-    val state: MutableState<String> = mutableStateOf(""),
-    val postalCode: MutableState<String> = mutableStateOf(""),
-    val country: MutableState<String> = mutableStateOf(""),
-    val notes: MutableState<String> = mutableStateOf(""),
-
-    val streetError: MutableState<String?> = mutableStateOf(null),
-    val numberError: MutableState<String?> = mutableStateOf(null),
-    val cityError: MutableState<String?> = mutableStateOf(null),
-    val stateError: MutableState<String?> = mutableStateOf(null),
-    val postalCodeError: MutableState<String?> = mutableStateOf(null),
-    val countryError: MutableState<String?> = mutableStateOf(null),
-) {
-    fun validate(): Boolean {
-        var valid = true
-
-        if (street.value.isEmpty()) {
-            streetError.value = "Street is required"
-            valid = false
-        } else {
-            streetError.value = null
-        }
-
-        if (number.value.isEmpty()) {
-            numberError.value = "Number is required"
-            valid = false
-        } else {
-            numberError.value = null
-        }
-
-        if (city.value.isEmpty()) {
-            cityError.value = "City is required"
-            valid = false
-        } else {
-            cityError.value = null
-        }
-
-        if (state.value.isEmpty()) {
-            stateError.value = "State is required"
-            valid = false
-        } else {
-            stateError.value = null
-        }
-
-        if (postalCode.value.isEmpty()) {
-            postalCodeError.value = "Postal code is required"
-            valid = false
-        } else {
-            postalCodeError.value = null
-        }
-
-        if (country.value.isEmpty()) {
-            countryError.value = "Country is required"
-            valid = false
-        } else {
-            countryError.value = null
-        }
-
-        return valid
-    }
-}
 
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
 @Composable
 fun AddressForm(
     label: String = "Address",
-    data: MutableState<AddressFormData> = mutableStateOf(AddressFormData())
+    data: MutableState<AddressFormData> = remember { mutableStateOf(AddressFormData()) },
+    modifier: Modifier = Modifier,
 ) {
     val focusRequesters = remember { List(7) { FocusRequester() } }
 
-    val street = remember { data.value.street }
-    val number = remember { data.value.number }
-    val city = remember { data.value.city }
-    val state = remember { data.value.state }
-    val postalCode = remember { data.value.postalCode }
-    val country = remember { data.value.country }
-    val notes = remember { data.value.notes }
-
-    val streetError = remember { data.value.streetError }
-    val numberError = remember { data.value.numberError }
-    val cityError = remember { data.value.cityError }
-    val stateError = remember { data.value.stateError }
-    val postalCodeError = remember { data.value.postalCodeError }
-    val countryError = remember { data.value.countryError }
-
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
-
     var dropdownMenuTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
     val dropdownMenuIcon = if (dropdownMenuExpanded)
@@ -128,7 +50,9 @@ fun AddressForm(
     else
         Icons.Filled.KeyboardArrowDown
 
-    Column(modifier = Modifier.background(MaterialTheme.colorScheme.surface)) {
+    Column(
+        modifier = modifier.background(MaterialTheme.colorScheme.surface)
+    ) {
         Text(
             label,
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
@@ -151,8 +75,8 @@ fun AddressForm(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacers.small)
             ) {
                 CustomTextField(
-                    value = street,
-                    error = streetError,
+                    value = data.value.street,
+                    error = data.value.streetError,
                     label = "Street",
                     modifier = Modifier
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
@@ -161,8 +85,8 @@ fun AddressForm(
                     nextFocusRequester = focusRequesters[1]
                 )
                 CustomTextField(
-                    value = number,
-                    error = numberError,
+                    value = data.value.number,
+                    error = data.value.numberError,
                     label = "Number",
                     modifier = Modifier
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
@@ -177,8 +101,8 @@ fun AddressForm(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.small)
             ) {
                 CustomTextField(
-                    value = city,
-                    error = cityError,
+                    value = data.value.city,
+                    error = data.value.cityError,
                     label = "City",
                     modifier = Modifier
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
@@ -188,8 +112,8 @@ fun AddressForm(
                 )
 
                 CustomTextField(
-                    value = state,
-                    error = stateError,
+                    value = data.value.state,
+                    error = data.value.stateError,
                     label = "State",
                     modifier = Modifier
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
@@ -204,8 +128,8 @@ fun AddressForm(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.paddings.small)
             ) {
                 CustomTextField(
-                    value = postalCode,
-                    error = postalCodeError,
+                    value = data.value.postalCode,
+                    error = data.value.postalCodeError,
                     label = "Postal Code",
                     modifier = Modifier
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
@@ -216,9 +140,9 @@ fun AddressForm(
 
                 Box {
                     OutlinedTextField(
-                        value = country.value,
-                        onValueChange = { country.value = it; dropdownMenuExpanded = true },
-                        isError = countryError.value != null,
+                        value = data.value.country.value,
+                        onValueChange = { data.value.country.value = it; dropdownMenuExpanded = true },
+                        isError = data.value.countryError.value != null,
                         modifier = Modifier
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                             .onGloballyPositioned { coordinates ->
@@ -234,7 +158,7 @@ fun AddressForm(
                                 }
                             },
                         label = {
-                            countryError.value?.let {
+                            data.value.countryError.value?.let {
                                 Text(
                                     it,
                                     color = MaterialTheme.colorScheme.error,
@@ -264,9 +188,11 @@ fun AddressForm(
                             .heightIn(max = 200.dp)
                             .width(with(LocalDensity.current) { dropdownMenuTextFieldSize.width.toDp() })
                     ) {
-                        Countries.filter { it.startsWith(country.value, ignoreCase = true) }.forEach { c ->
+                        Countries.filter {
+                            it.startsWith(data.value.country.value, ignoreCase = true)
+                        }.forEach { c ->
                             DropdownMenuItem({ Text(c) }, onClick = {
-                                country.value = c
+                                data.value.country.value = c
                                 dropdownMenuExpanded = false
                             })
                         }
@@ -279,7 +205,7 @@ fun AddressForm(
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacers.small)
             ) {
                 CustomTextField(
-                    value = notes,
+                    value = data.value.notes,
                     error = mutableStateOf(null),
                     label = "Notes",
                     modifier = Modifier

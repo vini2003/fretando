@@ -1,4 +1,4 @@
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.cargo
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,9 +11,14 @@ import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.common.entity.Cargo
 
 @Composable
-fun CargoCard(cargo: Cargo) {
+fun CargoCard(
+    cargo: Cargo,
+    modifier: Modifier = Modifier
+) {
+    if (!cargo.isComplete) return
+
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(MaterialTheme.paddings.medium),
         shape = RoundedCornerShape(10.dp)
     ) {

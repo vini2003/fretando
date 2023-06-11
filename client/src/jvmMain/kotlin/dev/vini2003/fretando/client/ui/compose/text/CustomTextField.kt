@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.text
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 
 @ExperimentalComposeUiApi
+@ExperimentalMaterial3Api
 @Composable
 fun CustomTextField(
     value: MutableState<String>,
@@ -39,19 +40,12 @@ fun CustomTextField(
         },
         modifier = modifier
             .onKeyEvent { keyEvent ->
-                if (nextFocusRequester != null) {
-                    if (keyEvent.key == Key.Tab) {
-                        if (keyEvent.type == KeyEventType.KeyUp) {
-                            nextFocusRequester.requestFocus()
-                        }
-
-                        true
-                    } else {
-                        false
-                    }
+                if (nextFocusRequester != null && keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyDown) {
+                    nextFocusRequester.requestFocus()
+                    true // consume the event
                 } else {
-                    false
+                    false // do not consume the event
                 }
-            },
+            }
     )
 }

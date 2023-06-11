@@ -1,4 +1,4 @@
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.misc
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

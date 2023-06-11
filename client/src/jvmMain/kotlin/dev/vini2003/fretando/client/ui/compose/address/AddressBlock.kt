@@ -1,4 +1,4 @@
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.address
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,11 @@ import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.common.entity.Address
 
 @Composable
-fun AddressBlock(title: String, address: Address, modifier: Modifier = Modifier) {
+fun AddressBlock(
+    title: String,
+    address: Address,
+    modifier: Modifier = Modifier
+) {
     if (!address.isComplete) return
 
     Column(
@@ -36,26 +40,19 @@ fun AddressBlock(title: String, address: Address, modifier: Modifier = Modifier)
                 .padding(MaterialTheme.paddings.small)
         )
         Spacer(Modifier.height(2.dp))
-        Text(
-            text = "${address.street ?: "N/A"}, ${address.number ?: "N/A"}",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            ),
-            modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
-        )
-        Text(
-            text = "${address.city ?: "N/A"}, ${address.state ?: "N/A"}",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            ),
-            modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
-        )
-        Text(
-            text = "${address.postalCode ?: "N/A"}, ${address.country ?: "N/A"}",
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            ),
-            modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
-        )
+        AddressText(text = "${address.street ?: "N/A"}, ${address.number ?: "N/A"}")
+        AddressText(text = "${address.city ?: "N/A"}, ${address.state ?: "N/A"}")
+        AddressText(text = "${address.postalCode ?: "N/A"}, ${address.country ?: "N/A"}")
     }
+}
+
+@Composable
+fun AddressText(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyMedium.copy(
+            color = MaterialTheme.colorScheme.onSecondaryContainer
+        ),
+        modifier = modifier.padding(horizontal = MaterialTheme.paddings.small)
+    )
 }

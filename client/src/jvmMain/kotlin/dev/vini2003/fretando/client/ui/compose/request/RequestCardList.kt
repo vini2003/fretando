@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.request
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -23,6 +23,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
+import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
+import dev.vini2003.fretando.client.ui.compose.LocalRemovePopup
+import dev.vini2003.fretando.client.ui.compose.misc.Paginator
+import dev.vini2003.fretando.client.ui.compose.data.RequestFormData
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
 import dev.vini2003.fretando.common.entity.Address

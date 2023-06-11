@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.bid
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteBidRepository
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
+import dev.vini2003.fretando.client.ui.compose.misc.Paginator
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.client.ui.theme.spacers
 import kotlinx.coroutines.launch
@@ -66,7 +67,7 @@ fun BidCardList() {
                     items(bidPages[pageIndex]) { bid ->
                         BidCard(
                             bid = bid,
-                            onRemoveClick = {
+                            onDeleteClick = {
                                 scope.launch {
                                     val request = RemoteRequestRepository.findById(bid.requestId)
 

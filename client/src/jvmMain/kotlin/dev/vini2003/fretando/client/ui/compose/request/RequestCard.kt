@@ -1,4 +1,4 @@
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.request
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,6 +15,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
+import dev.vini2003.fretando.client.ui.compose.bid.BidForm
+import dev.vini2003.fretando.client.ui.compose.cargo.CargoBlock
+import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
+import dev.vini2003.fretando.client.ui.compose.LocalRemovePopup
+import dev.vini2003.fretando.client.ui.compose.address.AddressBlock
+import dev.vini2003.fretando.client.ui.compose.data.BidFormData
+import dev.vini2003.fretando.client.ui.compose.data.RequestFormData
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.common.entity.Bid
 import dev.vini2003.fretando.common.entity.Request
@@ -136,7 +143,7 @@ fun RequestCard(
                                         onCancelClick = {
                                             removePopup(id)
                                         },
-                                        onBidClick = {
+                                        onConfirmClick = {
                                             if (bidFormData.value.validate()) {
                                                 scope.launch {
                                                     val bid = Bid(
