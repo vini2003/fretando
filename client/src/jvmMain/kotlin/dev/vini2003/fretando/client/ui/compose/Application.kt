@@ -73,7 +73,7 @@ fun Application() {
                 )
 
                 Row {
-                    val selectedMainContent = remember { mutableStateOf<(@Composable () -> Unit)>({ }) }
+                    val selectedMainContent = remember { mutableStateOf<(@Composable () -> Unit)>({ RequestCardList() }) }
 
                     // Sidebar
                     Surface(

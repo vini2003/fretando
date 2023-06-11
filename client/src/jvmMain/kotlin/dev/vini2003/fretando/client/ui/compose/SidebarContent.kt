@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pages
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.RequestPage
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.vini2003.fretando.client.ui.theme.paddings
-import dev.vini2003.fretando.client.ui.theme.spacers
 
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
@@ -37,19 +35,11 @@ fun SidebarContent(mainContentComposable: MutableState<@Composable () -> Unit>) 
             .background(MaterialTheme.colorScheme.background)
             .padding(top = MaterialTheme.paddings.medium, end = MaterialTheme.paddings.medium)
     ) {
-        SidebarContentItem(0, Icons.Default.Person, "My Profile") {
-            // TODO!
-        }
-        Spacer(Modifier.height(MaterialTheme.spacers.medium))
-        SidebarContentItem(3, Icons.Default.Pages, "My Requests") {
+        SidebarContentItem(3, Icons.Default.Pages, "Requests") {
             mainContentComposable.value = { RequestCardList() }
         }
-        SidebarContentItem(4, Icons.Default.RequestPage, "My Bids") {
+        SidebarContentItem(4, Icons.Default.RequestPage, "Bids") {
             mainContentComposable.value = { BidCardList() }
-        }
-        Spacer(Modifier.height(MaterialTheme.spacers.medium))
-        SidebarContentItem(1, Icons.Default.Pages, "Requests") {
-            // TODO!
         }
     }
 }
