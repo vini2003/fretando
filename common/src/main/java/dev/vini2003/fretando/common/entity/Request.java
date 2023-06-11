@@ -30,4 +30,8 @@ public class Request {
     private Cargo cargo;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Bid> bids;
+
+    public boolean isComplete() {
+        return origin != null && destination != null && cargo != null;
+    }
 }

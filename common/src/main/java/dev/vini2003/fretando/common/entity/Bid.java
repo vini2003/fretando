@@ -26,4 +26,8 @@ public class Bid  {
     private Long requestId;
 
     private double amount;
+
+    public boolean isComplete() {
+        return requestId != null && amount != 0;
+    }
 }

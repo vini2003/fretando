@@ -24,6 +24,8 @@ fun BidCard(
     showEditButton: Boolean = true,
     showRemoveButton: Boolean = true
 ) {
+    if (!bid.isComplete) return
+
     Card(
         modifier = Modifier
             .padding(MaterialTheme.paddings.medium),

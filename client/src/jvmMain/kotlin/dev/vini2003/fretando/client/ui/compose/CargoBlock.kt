@@ -15,6 +15,8 @@ import dev.vini2003.fretando.common.entity.Cargo
 
 @Composable
 fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
+    if (!cargo.isComplete) return
+
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.secondaryContainer)
@@ -33,7 +35,7 @@ fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
         )
         Spacer(Modifier.height(MaterialTheme.spacers.verySmall))
         Text(
-            text = cargo.description,
+            text = cargo.description ?: "N/A",
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )
@@ -56,7 +58,7 @@ fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
             )
             Spacer(Modifier.weight(1f))
             Text(
-                text = "%,.2f".format(cargo.weight) + cargo.weightUnit.asString(),
+                text = "%,.2f".format(cargo.weight) + (cargo.weightUnit?.asString() ?: "N/A"),
                 style = MaterialTheme.typography.titleSmall.copy(
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
@@ -81,9 +83,9 @@ fun CargoBlock(cargo: Cargo, modifier: Modifier = Modifier) {
             )
             Spacer(Modifier.weight(1f))
             Text(
-                text = "%,.2f".format(cargo.length) + cargo.lengthUnit.asString() + " ✕ " +
-                        "%,.2f".format(cargo.width) + cargo.widthUnit.asString() + " ✕ " +
-                        "%,.2f".format(cargo.height) + cargo.heightUnit.asString(),
+                text = "%,.2f".format(cargo.length) + (cargo.lengthUnit?.asString() ?: "N/A")  + " ✕ " +
+                        "%,.2f".format(cargo.width) + (cargo.widthUnit?.asString() ?: "N/A") + " ✕ " +
+                        "%,.2f".format(cargo.height) + (cargo.heightUnit?.asString() ?: "N/A"),
                 style = MaterialTheme.typography.titleSmall.copy(
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 ),

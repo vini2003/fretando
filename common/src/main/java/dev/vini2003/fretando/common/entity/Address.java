@@ -35,4 +35,8 @@ public class Address {
     private String postalCode;
     private String country;
     private String notes;
+
+    public boolean isComplete() {
+        return street != null && number != null && city != null && state != null && postalCode != null && country != null;
+    }
 }

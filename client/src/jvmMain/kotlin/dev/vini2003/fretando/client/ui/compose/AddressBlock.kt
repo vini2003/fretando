@@ -17,6 +17,8 @@ import dev.vini2003.fretando.common.entity.Address
 
 @Composable
 fun AddressBlock(title: String, address: Address, modifier: Modifier = Modifier) {
+    if (!address.isComplete) return
+
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.secondaryContainer)
@@ -35,21 +37,21 @@ fun AddressBlock(title: String, address: Address, modifier: Modifier = Modifier)
         )
         Spacer(Modifier.height(2.dp))
         Text(
-            text = "${address.street}, ${address.number}",
+            text = "${address.street ?: "N/A"}, ${address.number ?: "N/A"}",
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             ),
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )
         Text(
-            text = "${address.city}, ${address.state}",
+            text = "${address.city ?: "N/A"}, ${address.state ?: "N/A"}",
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             ),
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )
         Text(
-            text = "${address.postalCode}, ${address.country}",
+            text = "${address.postalCode ?: "N/A"}, ${address.country ?: "N/A"}",
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             ),

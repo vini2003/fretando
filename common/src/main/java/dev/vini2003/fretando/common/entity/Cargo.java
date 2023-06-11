@@ -44,6 +44,10 @@ public class Cargo {
 
     private String description;
 
+    public boolean isComplete() {
+        return length != 0 && lengthUnit != null && width != 0 && widthUnit != null && height != 0 && heightUnit != null && weight != 0 && weightUnit != null && description != null;
+    }
+
     public enum DimensionUnit {
         METERS, FEET;
 
