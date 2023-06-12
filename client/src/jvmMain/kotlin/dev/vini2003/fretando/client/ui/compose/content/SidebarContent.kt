@@ -29,10 +29,10 @@ fun SidebarContent(mainContentComposable: MutableState<@Composable () -> Unit>) 
             .background(MaterialTheme.colorScheme.background)
             .padding(top = MaterialTheme.paddings.medium, end = MaterialTheme.paddings.medium)
     ) {
-        SidebarContentItem(3, Icons.Default.Pages, "Requests") {
+        SidebarContentItem(Icons.Default.Pages, "Requests") {
             mainContentComposable.value = { RequestCardList() }
         }
-        SidebarContentItem(4, Icons.Default.RequestPage, "Bids") {
+        SidebarContentItem(Icons.Default.RequestPage, "Bids") {
             mainContentComposable.value = { BidCardList() }
         }
     }

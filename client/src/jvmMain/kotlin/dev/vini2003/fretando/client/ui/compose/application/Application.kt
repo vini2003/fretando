@@ -1,13 +1,13 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package dev.vini2003.fretando.client.ui.compose
+package dev.vini2003.fretando.client.ui.compose.application
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,11 +17,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import dev.vini2003.fretando.client.PopupComposable
+import dev.vini2003.fretando.client.ui.compose.config.ConfigForm
 import dev.vini2003.fretando.client.ui.compose.content.MainContent
 import dev.vini2003.fretando.client.ui.compose.content.SidebarContent
+import dev.vini2003.fretando.client.ui.compose.popup.PopupComposable
 import dev.vini2003.fretando.client.ui.compose.request.RequestCardList
-import dev.vini2003.fretando.client.ui.theme.AppTheme
 import dev.vini2003.fretando.client.ui.theme.paddings
 
 val LocalPopupList = staticCompositionLocalOf<List<PopupComposable>> { emptyList() }
@@ -31,7 +31,7 @@ val LocalRemovePopup = staticCompositionLocalOf<(Int) -> Unit> { {} }
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Application() {
-    AppTheme {
+    MaterialTheme {
         var popupList by remember { mutableStateOf(listOf<PopupComposable>()) }
 
         fun addPopup(popup: @Composable (id: Int) -> Unit) {
@@ -60,9 +60,13 @@ fun Application() {
                     },
                     colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                     navigationIcon = {
-                        IconButton(onClick = { /* doSomething() */ }, modifier = Modifier.padding(start = 12.dp)) {
+                        IconButton(onClick = {
+                            addPopup {
+                                ConfigForm()
+                            }
+                        }, modifier = Modifier.padding(start = 12.dp)) {
                             Icon(
-                                Icons.Default.Home,
+                                Icons.Default.Settings,
                                 contentDescription = "Menu",
                                 modifier = Modifier
                                     .width(48.dp)
@@ -76,7 +80,8 @@ fun Application() {
                 )
 
                 Row {
-                    val selectedMainContent = remember { mutableStateOf<(@Composable () -> Unit)>({ RequestCardList() }) }
+                    val selectedMainContent =
+                        remember { mutableStateOf<(@Composable () -> Unit)>({ RequestCardList() }) }
 
                     // Sidebar
                     Surface(

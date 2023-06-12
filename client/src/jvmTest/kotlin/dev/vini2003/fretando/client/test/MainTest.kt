@@ -111,7 +111,7 @@ class MainTest {
                 assertEquals(findByIdResponse, it)
             }.onEach {
                 val mock = Mock.bid().let { mock ->
-                    Bid(it.id, mock.request, mock.amount)
+                    Bid(it.id, mock.requestId, mock.amount)
                 }
 
                 // Test updating
@@ -252,7 +252,7 @@ class MainTest {
                         mock.bids.mapIndexed { index, mockBid ->
                             Bid(
                                 it.bids[index].id,
-                                mockBid.request,
+                                mockBid.requestId,
                                 mockBid.amount
                             )
                         })

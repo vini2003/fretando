@@ -23,8 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
-import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
-import dev.vini2003.fretando.client.ui.compose.LocalRemovePopup
+import dev.vini2003.fretando.client.ui.compose.application.LocalAddPopup
+import dev.vini2003.fretando.client.ui.compose.application.LocalRemovePopup
 import dev.vini2003.fretando.client.ui.compose.bid.BidForm
 import dev.vini2003.fretando.client.ui.compose.data.BidFormData
 import dev.vini2003.fretando.client.ui.compose.data.RequestFormData
@@ -86,7 +86,7 @@ fun RequestCardList() {
                                 addPopup { id ->
                                     val bidFormData = remember {
                                         mutableStateOf(
-                                            BidFormData(request = mutableStateOf(request))
+                                            BidFormData(requestId = mutableStateOf(request.id))
                                         )
                                     }
 
@@ -184,19 +184,19 @@ fun RequestCardList() {
                         }
                     )
                 }
-            }, modifier = Modifier
+            },
+            modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .size(128.dp)
+                .size(96.dp)
                 .padding(MaterialTheme.paddings.large)
-                .shadow(4.dp, MaterialTheme.shapes.large)
-                .clip(MaterialTheme.shapes.large)
+                .shadow(4.dp, MaterialTheme.shapes.extraLarge)
+                .clip(MaterialTheme.shapes.extraLarge)
                 .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
             Icon(
                 Icons.Rounded.Add,
                 contentDescription = "Create new request",
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.size(48.dp)
             )
         }
     }

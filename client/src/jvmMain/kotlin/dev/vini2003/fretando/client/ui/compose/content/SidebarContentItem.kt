@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import dev.vini2003.fretando.client.ui.theme.paddings
 
 @Composable
-fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: () -> Unit) {
+fun SidebarContentItem(icon: ImageVector, label: String, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -32,8 +31,8 @@ fun SidebarContentItem(index: Int, icon: ImageVector, label: String, onClick: ()
     ) {
         Icon(
             icon,
-            contentDescription = "Arrow icon",
-            tint = if (index % 2 == 0) Color.White.copy(alpha = 0.9F) else Color.White
+            contentDescription = "Sidebar item",
+            tint = MaterialTheme.colorScheme.onSecondaryContainer,
         )
         Text(
             text = label,

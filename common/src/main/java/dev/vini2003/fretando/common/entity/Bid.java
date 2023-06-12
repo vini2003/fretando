@@ -14,17 +14,16 @@ public class Bid  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Bid(Request request, double amount) {
-        this.request = request;
+    public Bid(Long requestId, double amount) {
+        this.requestId = requestId;
         this.amount = amount;
     }
 
-    @ManyToOne
-    private Request request;
+    private Long requestId;
 
     private double amount;
 
     public boolean isComplete() {
-        return request != null && amount != 0;
+        return requestId != null && amount != 0;
     }
 }

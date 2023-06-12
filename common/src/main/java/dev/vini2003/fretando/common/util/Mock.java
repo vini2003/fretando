@@ -29,7 +29,7 @@ public class Mock {
 
     public static Bid bid() {
         return new Bid(
-                request(),
+                request().getId(),
                 FAKER.number().randomDouble(2, 1, 100)
         );
     }

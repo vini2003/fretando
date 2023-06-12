@@ -48,6 +48,17 @@ public class Cargo {
         return length != 0 && lengthUnit != null && width != 0 && widthUnit != null && height != 0 && heightUnit != null && weight != 0 && weightUnit != null && description != null;
     }
 
+    @Override
+    public String toString() {
+        return "[ Cargo ID: " + id +
+                ", Length: " + length + " " + lengthUnit +
+                ", Width: " + width + " " + widthUnit +
+                ", Height: " + height + " " + heightUnit +
+                ", Weight: " + weight + " " + weightUnit +
+                ", Description: " + description +
+                " ]";
+    }
+
     public enum DimensionUnit {
         METERS, FEET;
 

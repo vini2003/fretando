@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteBidRepository
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
-import dev.vini2003.fretando.client.ui.compose.LocalAddPopup
-import dev.vini2003.fretando.client.ui.compose.LocalRemovePopup
+import dev.vini2003.fretando.client.ui.compose.application.LocalAddPopup
+import dev.vini2003.fretando.client.ui.compose.application.LocalRemovePopup
 import dev.vini2003.fretando.client.ui.compose.data.BidFormData
 import dev.vini2003.fretando.client.ui.compose.misc.Paginator
 import dev.vini2003.fretando.client.ui.compose.request.RequestCard
@@ -101,7 +101,9 @@ fun BidCardList() {
                             },
                             onDeleteClick = {
                                 scope.launch {
-                                    val request = bid.request // TODO: Check if working! Used to be "requestId".
+                                    val request = bid.requestId?.let {
+                                        RemoteRequestRepository.findById(it)
+                                    } ?: return@launch
 
                                     request.bids.minusAssign(bid)
 
@@ -114,7 +116,9 @@ fun BidCardList() {
                             },
                             onRequestClick = {
                                 scope.launch {
-                                    val request = bid.request // TODO: Check if working! Used to be "requestId".
+                                    val request = bid.requestId?.let {
+                                        RemoteRequestRepository.findById(it)
+                                    } ?: return@launch
 
                                     addPopup {
                                         RequestCard(

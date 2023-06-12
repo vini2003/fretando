@@ -34,4 +34,14 @@ public class Request {
     public boolean isComplete() {
         return origin != null && destination != null && cargo != null;
     }
+
+    @Override
+    public String toString() {
+        return "[ Request ID: " + id +
+                ", Origin: " + origin +
+                ", Destination: " + destination +
+                ", Cargo: " + cargo +
+                ", Bids: " + bids +
+                " ]";
+    }
 }

@@ -39,4 +39,17 @@ public class Address {
     public boolean isComplete() {
         return street != null && number != null && city != null && state != null && postalCode != null && country != null;
     }
+
+    @Override
+    public String toString() {
+        return "[ Address ID: " + id +
+                ", Street: " + street +
+                ", Number: " + number +
+                ", City: " + city +
+                ", State: " + state +
+                ", Postal Code: " + postalCode +
+                ", Country: " + country +
+                ", Notes: " + notes +
+                " ]";
+    }
 }
