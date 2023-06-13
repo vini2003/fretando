@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalComposeUiApi::class)
-
 package dev.vini2003.fretando.client.ui.compose.request
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
