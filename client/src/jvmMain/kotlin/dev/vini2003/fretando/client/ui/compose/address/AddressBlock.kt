@@ -21,6 +21,7 @@ fun AddressBlock(
     address: Address,
     modifier: Modifier = Modifier
 ) {
+    // Check if the address is complete
     if (!address.isComplete) return
 
     Column(
@@ -46,6 +47,12 @@ fun AddressBlock(
     }
 }
 
+/**
+ * Renders address text.
+ *
+ * @param text: The text to be displayed.
+ * @param modifier: A modifier for customizing the appearance or behavior of the text.
+ */
 @Composable
 fun AddressText(text: String, modifier: Modifier = Modifier) {
     Text(

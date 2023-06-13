@@ -6,6 +6,7 @@ import dev.vini2003.fretando.common.entity.Bid;
 import dev.vini2003.fretando.common.entity.Cargo;
 import dev.vini2003.fretando.common.entity.Request;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -27,9 +28,9 @@ public class Mock {
         );
     }
 
-    public static Bid bid() {
+    public static Bid bid(Request request) {
         return new Bid(
-                request().getId(),
+                request.getId(),
                 FAKER.number().randomDouble(2, 1, 100)
         );
     }
@@ -54,10 +55,15 @@ public class Mock {
         Address destination = address();
         Cargo cargo = cargo();
 
+
+        var request = new Request(FAKER.random().nextLong(), origin, destination, cargo, new ArrayList<>());
+
         List<Bid> bids = IntStream.range(0, 5)
-                .mapToObj(i -> bid())
+                .mapToObj(i -> bid(request))
                 .collect(Collectors.toList());
 
-        return new Request(FAKER.random().nextLong(), origin, destination, cargo, bids);
+        request.setBids(bids);
+
+        return request;
     }
 }

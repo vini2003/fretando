@@ -19,13 +19,13 @@ fun CancelButton(
     Button(
         modifier = modifier
             .height(54.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
         onClick = onCancelClick,
     ) {
         Text(
             "Close",
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onErrorContainer,
+                color = MaterialTheme.colorScheme.onError,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )

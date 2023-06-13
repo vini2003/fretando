@@ -33,10 +33,8 @@ import kotlinx.coroutines.runBlocking
 fun BidCardList() {
     val scope = rememberCoroutineScope()
 
-    // Manage page index state
     var pageIndex by remember { mutableStateOf(0) }
 
-    // Generate 48 pages with 20 requests each
     var bidPages by remember {
         mutableStateOf(
             runBlocking {

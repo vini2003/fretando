@@ -19,13 +19,13 @@ fun DeleteButton(
     Button(
         modifier = modifier
             .padding(MaterialTheme.paddings.small),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
         onClick = onDeleteClick,
     ) {
         Text(
             "✕",
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = MaterialTheme.colorScheme.onErrorContainer,
+                color = MaterialTheme.colorScheme.onError,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )

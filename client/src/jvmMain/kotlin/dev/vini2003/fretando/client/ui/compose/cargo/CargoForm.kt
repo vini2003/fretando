@@ -65,6 +65,18 @@ fun CargoForm(
                         error = data.value.lengthError,
                         isValueAllowed = { newValue ->
                             if (newValue.matches(Regex("^\\d*(,\\d*)*(\\.\\d{0,2})?$"))) {
+                                try {
+                                    val value = newValue.toDouble()
+
+                                    if (value > 0.0) {
+                                        data.value.lengthError.value = null
+                                    } else {
+                                        data.value.lengthError.value = "Invalid"
+                                    }
+                                } catch (exception: NumberFormatException) {
+                                    data.value.lengthError.value = "Invalid"
+                                }
+
                                 true
                             } else {
                                 data.value.lengthError.value = "Invalid"

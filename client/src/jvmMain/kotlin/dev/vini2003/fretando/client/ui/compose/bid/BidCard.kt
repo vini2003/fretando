@@ -75,13 +75,13 @@ fun BidCard(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.errorContainer),
+                        .background(MaterialTheme.colorScheme.error),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "Lowest bid",
-                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        color = MaterialTheme.colorScheme.onError,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(MaterialTheme.paddings.medium)
@@ -89,7 +89,7 @@ fun BidCard(
 
                     Text(
                         text = "$${"%,.2f".format(request.bids.minBy { it.amount }.amount)}",
-                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        color = MaterialTheme.colorScheme.onError,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(MaterialTheme.paddings.medium)

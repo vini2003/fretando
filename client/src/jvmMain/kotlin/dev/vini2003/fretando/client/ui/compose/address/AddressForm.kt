@@ -57,12 +57,12 @@ fun AddressForm(
             label,
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F), // TODO: Check this!
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F),
             modifier = Modifier.padding(MaterialTheme.paddings.small)
         )
 
         Divider(
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.0F), // TODO: Check this!
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.0F),
             thickness = 1.dp,
             modifier = Modifier.padding(horizontal = MaterialTheme.paddings.small)
         )

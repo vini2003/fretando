@@ -21,17 +21,19 @@ import dev.vini2003.fretando.client.ui.compose.config.ConfigForm
 import dev.vini2003.fretando.client.ui.compose.content.MainContent
 import dev.vini2003.fretando.client.ui.compose.content.SidebarContent
 import dev.vini2003.fretando.client.ui.compose.popup.PopupComposable
-import dev.vini2003.fretando.client.ui.compose.request.RequestCardList
+import dev.vini2003.fretando.client.ui.compose.welcome.Welcome
+import dev.vini2003.fretando.client.ui.theme.AppTheme
 import dev.vini2003.fretando.client.ui.theme.paddings
 
 val LocalPopupList = staticCompositionLocalOf<List<PopupComposable>> { emptyList() }
 val LocalAddPopup = staticCompositionLocalOf<(@Composable (id: Int) -> Unit) -> Unit> { {} }
 val LocalRemovePopup = staticCompositionLocalOf<(Int) -> Unit> { {} }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@ExperimentalComposeUiApi
+@ExperimentalMaterial3Api
 @Composable
 fun Application() {
-    MaterialTheme {
+    AppTheme {
         var popupList by remember { mutableStateOf(listOf<PopupComposable>()) }
 
         fun addPopup(popup: @Composable (id: Int) -> Unit) {
@@ -40,6 +42,16 @@ fun Application() {
 
         fun removePopup(id: Int) {
             popupList = popupList.filterNot { it.id == id }
+        }
+
+        var firstTime by remember { mutableStateOf(true) }
+
+        if (firstTime) {
+            firstTime = false
+
+            addPopup {
+                Welcome()
+            }
         }
 
         CompositionLocalProvider(
@@ -81,29 +93,25 @@ fun Application() {
 
                 Row {
                     val selectedMainContent =
-                        remember { mutableStateOf<(@Composable () -> Unit)>({ RequestCardList() }) }
+                        remember { mutableStateOf<(@Composable () -> Unit)>({ }) }
 
-                    // Sidebar
                     Surface(
                         modifier = Modifier
                             .width(200.dp)
                             .fillMaxHeight()
-                            .background(MaterialTheme.colorScheme.background) // change to your desired purple color
+                            .background(MaterialTheme.colorScheme.background)
                             .padding(start = MaterialTheme.paddings.medium)
                     ) {
                         SidebarContent(selectedMainContent)
                     }
 
-                    // The rest of your app
                     MainContent(selectedMainContent)
                 }
             }
 
-            // Display them in the middle of the screen, based on their size.
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
-                // Draw a background to hide what's below if there is a popup
                 if (popupList.isNotEmpty()) {
                     Box(
                         modifier = Modifier
@@ -111,7 +119,6 @@ fun Application() {
                             .background(Color.Black.copy(alpha = 0.5f))
                             .clickable(
                                 onClick = {
-                                    // Remove the last popup when clicking on the background
                                     if (popupList.isNotEmpty()) {
                                         removePopup(popupList.last().id)
                                     }
@@ -122,9 +129,7 @@ fun Application() {
                     )
                 }
 
-                // Iterate over each PopupComposable in the list
                 popupList.forEach { popup ->
-                    // wrap in a box and center it
                     Box(
                         modifier = Modifier
                             .wrapContentSize()
