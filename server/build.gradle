@@ -1,41 +1,38 @@
 plugins {
+    // Spring Boot
     id 'org.springframework.boot'
+
+    // Spring Dependency Management
     id 'io.spring.dependency-management'
+
+    // Java
     id 'java'
 }
 
+// Use Java 20.
 sourceCompatibility = 20
 targetCompatibility = 20
-
-group = 'dev.vini2003'
-version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-
+    // Common
     implementation project(":common")
 
+    // Spring Boot Starter Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Spring Boot Starter Data JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // H2
     runtimeOnly 'com.h2database:h2'
 
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
-    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-}
-
-test {
-    useJUnitPlatform()
+    // Project Lombok
+    compileOnly "org.projectlombok:lombok:${projectLombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${projectLombokVersion}"
 }
 
 jar {

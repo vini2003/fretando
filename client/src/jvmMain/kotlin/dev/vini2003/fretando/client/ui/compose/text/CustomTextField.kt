@@ -23,6 +23,7 @@ fun CustomTextField(
     error: MutableState<String?>,
     label: String,
     modifier: Modifier = Modifier,
+    previousFocusRequester: FocusRequester? = null,
     nextFocusRequester: FocusRequester? = null,
     isValueAllowed: (String) -> Boolean = { true },
 ) {
@@ -40,11 +41,15 @@ fun CustomTextField(
         },
         modifier = modifier
             .onPreviewKeyEvent { keyEvent ->
-                if (nextFocusRequester != null && keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyDown) {
-                    nextFocusRequester.requestFocus()
-                    true // consume the event
+                if (keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyDown) {
+                    if (keyEvent.isShiftPressed) {
+                        previousFocusRequester?.requestFocus()
+                    } else {
+                        nextFocusRequester?.requestFocus()
+                    }
+                    true
                 } else {
-                    false // do not consume the event
+                    false
                 }
             }
     )

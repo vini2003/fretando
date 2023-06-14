@@ -17,8 +17,6 @@ allprojects {
 
     dependencies {
         implementation("org.jetbrains:annotations:${jetbrainsAnnotationsVersion}")
-
-        implementation("com.github.javafaker:javafaker:${javaFakerVersion}")
     }
 
     compileJava {

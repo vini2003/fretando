@@ -21,7 +21,6 @@ fun AddressBlock(
     address: Address,
     modifier: Modifier = Modifier
 ) {
-    // Check if the address is complete
     if (!address.isComplete) return
 
     Column(

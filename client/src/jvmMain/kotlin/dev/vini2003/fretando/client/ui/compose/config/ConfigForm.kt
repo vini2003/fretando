@@ -48,7 +48,7 @@ fun ConfigForm(
             "Configuration",
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F), // TODO: Check this!
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F),
             modifier = Modifier.padding(MaterialTheme.paddings.small)
         )
 

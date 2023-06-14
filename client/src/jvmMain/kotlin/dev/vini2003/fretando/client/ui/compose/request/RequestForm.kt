@@ -17,6 +17,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.ui.compose.address.AddressForm
 import dev.vini2003.fretando.client.ui.compose.button.CancelButton
@@ -51,9 +52,24 @@ fun RequestForm(
             .verticalScroll(rememberScrollState())
             .padding(MaterialTheme.paddings.large)
     ) {
-        AddressSection(data.value.originAddressFormData, data.value.destinationAddressFormData)
+        val originAddressFirstFocusRequester = FocusRequester()
+        val destinationAddressFirstFocusRequester = FocusRequester()
+        val cargoFirstFocusRequester = FocusRequester()
+
+        AddressSection(
+            data.value.originAddressFormData,
+            data.value.destinationAddressFormData,
+            originAddressFirstFocusRequester = originAddressFirstFocusRequester,
+            originAddressNextFocusRequester = destinationAddressFirstFocusRequester,
+            destinationAddressFirstFocusRequester = destinationAddressFirstFocusRequester,
+            destinationAddressNextFocusRequester = cargoFirstFocusRequester
+        )
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
-        CargoForm(data.value.cargoFormData)
+        CargoForm(
+            data.value.cargoFormData,
+            firstFocusRequester = cargoFirstFocusRequester,
+            nextFocusRequester = originAddressFirstFocusRequester
+        )
         Spacer(Modifier.height(MaterialTheme.spacers.medium))
 
         if (enableCancel || enableCreate) {
@@ -76,10 +92,24 @@ fun RequestForm(
 private fun AddressSection(
     originAddressFormData: MutableState<AddressFormData>,
     destinationAddressFormData: MutableState<AddressFormData>,
+    originAddressFirstFocusRequester: FocusRequester = FocusRequester(),
+    destinationAddressFirstFocusRequester: FocusRequester = FocusRequester(),
+    originAddressNextFocusRequester: FocusRequester = FocusRequester(),
+    destinationAddressNextFocusRequester: FocusRequester = FocusRequester(),
 ) {
-    AddressForm(label = "Origin Address", originAddressFormData)
+    AddressForm(
+        label = "Origin Address",
+        originAddressFormData,
+        firstFocusRequester = originAddressFirstFocusRequester,
+        nextFocusRequester = originAddressNextFocusRequester
+    )
     Spacer(Modifier.height(MaterialTheme.spacers.medium))
-    AddressForm(label = "Destination Address", destinationAddressFormData)
+    AddressForm(
+        label = "Destination Address",
+        destinationAddressFormData,
+        firstFocusRequester = destinationAddressFirstFocusRequester,
+        nextFocusRequester = destinationAddressNextFocusRequester
+    )
 }
 
 @Composable

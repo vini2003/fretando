@@ -68,7 +68,7 @@ fun CargoBlock(
             )
         }
 
-        Spacer(Modifier.height(4.dp))  // Space between the two rows
+        Spacer(Modifier.height(4.dp))
 
         Row(
             modifier = Modifier

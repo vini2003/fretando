@@ -4,23 +4,30 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.vini2003.fretando.client.repository.RemoteRequestRepository
 import dev.vini2003.fretando.client.ui.compose.address.AddressBlock
+import dev.vini2003.fretando.client.ui.compose.application.LocalAddPopup
+import dev.vini2003.fretando.client.ui.compose.application.LocalRemovePopup
 import dev.vini2003.fretando.client.ui.compose.button.DeleteButton
 import dev.vini2003.fretando.client.ui.compose.button.EditButton
 import dev.vini2003.fretando.client.ui.compose.button.RequestButton
 import dev.vini2003.fretando.client.ui.compose.cargo.CargoBlock
+import dev.vini2003.fretando.client.ui.compose.error.ErrorCard
 import dev.vini2003.fretando.client.ui.theme.paddings
 import dev.vini2003.fretando.common.entity.Bid
-import kotlinx.coroutines.runBlocking
+import dev.vini2003.fretando.common.entity.Request
+import kotlinx.coroutines.launch
 
+@ExperimentalComposeApi
+@ExperimentalMaterial3Api
 @Composable
 fun BidCard(
     bid: Bid,
@@ -31,13 +38,33 @@ fun BidCard(
     enableEdit: Boolean = true,
     enableDelete: Boolean = true
 ) {
-    if (!bid.isComplete) return
+    val addPopup = LocalAddPopup.current
+    val removePopup = LocalRemovePopup.current
 
-    val request = runBlocking {
-        bid.requestId?.let { RemoteRequestRepository.findById(it) }
-    } ?: return
+    val scope = rememberCoroutineScope()
 
-    if (!request.isComplete) return
+    var request by remember { mutableStateOf<Request?>(null) }
+
+    var firstTime by remember { mutableStateOf(true) }
+
+    if (firstTime) {
+        firstTime = false
+
+        scope.launch {
+            try {
+                request = RemoteRequestRepository.findById(bid.requestId)
+            } catch (exception: Exception) {
+                addPopup { id ->
+                    ErrorCard(
+                        errorMessage = exception.message ?: "Unknown error",
+                        onDismissClick = { removePopup(id) }
+                    )
+                }
+            }
+        }
+    }
+
+    if (request == null || !request!!.isComplete) return
 
     Card(
         modifier = Modifier
@@ -69,7 +96,7 @@ fun BidCard(
                 )
             }
 
-            val lowestBid = request.bids?.minByOrNull { it.amount }
+            val lowestBid = request!!.bids?.minByOrNull { it.amount }
 
             if (lowestBid != null && lowestBid != bid) {
                 Row(
@@ -88,7 +115,7 @@ fun BidCard(
                     )
 
                     Text(
-                        text = "$${"%,.2f".format(request.bids.minBy { it.amount }.amount)}",
+                        text = "$${"%,.2f".format(request!!.bids.minBy { it.amount }.amount)}",
                         color = MaterialTheme.colorScheme.onError,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineSmall,
@@ -105,25 +132,25 @@ fun BidCard(
             ) {
                 AddressBlock(
                     title = "Origin",
-                    address = request.origin,
+                    address = request!!.origin,
                     modifier = Modifier
-                        .weight(1f) // To make sure they share the available space
+                        .weight(1f)
                         .background(MaterialTheme.colorScheme.primaryContainer)
                 )
 
-                Spacer(Modifier.width(16.dp)) // Adding a space between the two blocks for better readability
+                Spacer(Modifier.width(16.dp))
 
                 AddressBlock(
                     title = "Destination",
-                    address = request.destination,
+                    address = request!!.destination,
                     modifier = Modifier
-                        .weight(1f) // To make sure they share the available space
+                        .weight(1f)
                         .background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
 
             CargoBlock(
-                cargo = request.cargo,
+                cargo = request!!.cargo,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.primaryContainer)

@@ -29,6 +29,7 @@ val LocalPopupList = staticCompositionLocalOf<List<PopupComposable>> { emptyList
 val LocalAddPopup = staticCompositionLocalOf<(@Composable (id: Int) -> Unit) -> Unit> { {} }
 val LocalRemovePopup = staticCompositionLocalOf<(Int) -> Unit> { {} }
 
+@ExperimentalComposeApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterial3Api
 @Composable
@@ -60,7 +61,7 @@ fun Application() {
             LocalRemovePopup provides ::removePopup
         ) {
             Column(
-                modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                modifier = Modifier.background(MaterialTheme.colorScheme.background)
             ) {
                 TopAppBar(
                     title = {
@@ -135,7 +136,6 @@ fun Application() {
                             .wrapContentSize()
                             .align(Alignment.Center)
                     ) {
-                        // Draw the popup
                         popup.content(popup.id)
                     }
                 }

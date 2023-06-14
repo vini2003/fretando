@@ -96,17 +96,18 @@ fun RequestCard(
                     title = "Origin",
                     address = request.origin,
                     modifier = Modifier
-                        .weight(1f) // To make sure they share the available space
+                        .weight(1f)
                         .background(MaterialTheme.colorScheme.primaryContainer)
                 )
 
-                Spacer(Modifier.width(16.dp)) // Adding a space between the two blocks for better readability
+                Spacer(Modifier.width(16.dp))
 
                 AddressBlock(
                     title = "Destination",
                     address = request.destination,
                     modifier = Modifier
-                        .weight(1f) // To make sure they share the available space
+                        .weight(1f)
+                        .weight(1f)
                         .background(MaterialTheme.colorScheme.primaryContainer)
                 )
             }

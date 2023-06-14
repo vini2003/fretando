@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.RequestPage
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import dev.vini2003.fretando.client.ui.theme.paddings
 
 @ExperimentalMaterial3Api
 @ExperimentalComposeUiApi
+@ExperimentalComposeApi
 @Composable
 fun SidebarContent(mainContentComposable: MutableState<@Composable () -> Unit>) {
     Column(

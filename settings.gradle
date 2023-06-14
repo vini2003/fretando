@@ -1,19 +1,35 @@
 pluginManagement {
     repositories {
+        // Google
         google()
+
+        // Gradle Plugin Portal
         gradlePluginPortal()
+
+        // Maven Central
         mavenCentral()
 
+        // Jetpack Compose
         maven {
-            url = 'https://maven.pkg.jetbrains.space/public/p/compose/dev'
+            name = "Jetpack Compose"
+            url = "https://maven.pkg.jetbrains.space/public/p/compose/dev"
         }
     }
 
     plugins {
+        // Kotlin Multiplatform
         id 'org.jetbrains.kotlin.multiplatform' version kotlinVersion
-        id 'org.jetbrains.compose' version composeVersion
+
+        // Jetpack Compose
+        id 'org.jetbrains.compose' version jetpackComposeVersion
+
+        // Spring Boot
         id 'org.springframework.boot' version springBootVersion
+
+        // Spring Dependency Management
         id 'io.spring.dependency-management' version springDependencyManagementVersion
+
+        // Java
         id 'java'
     }
 }

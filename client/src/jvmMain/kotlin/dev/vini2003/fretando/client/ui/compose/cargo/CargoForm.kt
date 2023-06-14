@@ -27,11 +27,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun CargoForm(
     data: MutableState<CargoFormData> = remember { mutableStateOf(CargoFormData()) },
+    firstFocusRequester: FocusRequester? = null,
+    nextFocusRequester: FocusRequester? = null,
     modifier: Modifier = Modifier,
 ) {
     val scope = rememberCoroutineScope()
 
-    val focusRequesters = remember { List(5) { FocusRequester() } }
+    val focusRequesters = remember { MutableList(5) { FocusRequester() } }
+    if (firstFocusRequester != null) {
+        focusRequesters[0] = firstFocusRequester
+    }
 
     val unitsDimensions = Cargo.DimensionUnit.values().map { it.asString() }
 
@@ -50,7 +55,7 @@ fun CargoForm(
             "Cargo",
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F), // TODO: Check this!
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75F),
             modifier = Modifier.padding(MaterialTheme.paddings.small)
         )
 
@@ -94,9 +99,10 @@ fun CargoForm(
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                             .width(120.dp)
                             .focusRequester(focusRequesters[0]),
+                        previousFocusRequester = focusRequesters[4],
                         nextFocusRequester = focusRequesters[1]
                     )
-                    // Added dropdown for Length Unit
+
                     ItemizedDropdownMenu(selectedItem = data.value.lengthUnit, items = unitsDimensions, dropdownExpanded = lengthUnitDropdownExpanded)
                 }
 
@@ -123,9 +129,10 @@ fun CargoForm(
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                             .width(120.dp)
                             .focusRequester(focusRequesters[1]),
+                        previousFocusRequester = focusRequesters[0],
                         nextFocusRequester = focusRequesters[2]
                     )
-                    // Added dropdown for Width Unit
+
                     ItemizedDropdownMenu(selectedItem = data.value.widthUnit, items = unitsDimensions, dropdownExpanded = widthUnitDropdownExpanded)
                 }
 
@@ -152,9 +159,10 @@ fun CargoForm(
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                             .width(120.dp)
                             .focusRequester(focusRequesters[2]),
+                        previousFocusRequester = focusRequesters[1],
                         nextFocusRequester = focusRequesters[3]
                     )
-                    // Added dropdown for Height Unit
+
                     ItemizedDropdownMenu(selectedItem = data.value.heightUnit, items = unitsDimensions, dropdownExpanded = heightUnitDropdownExpanded)
                 }
 
@@ -183,9 +191,10 @@ fun CargoForm(
                             .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                             .width(120.dp)
                             .focusRequester(focusRequesters[3]),
+                        previousFocusRequester = focusRequesters[2],
                         nextFocusRequester = focusRequesters[4]
                     )
-                    // Added dropdown for Weight Unit
+
                     ItemizedDropdownMenu(selectedItem = data.value.weightUnit, items = unitsWeight, dropdownExpanded = weightDropdownExpanded)
                 }
             }
@@ -199,7 +208,8 @@ fun CargoForm(
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(568.dp)
                         .focusRequester(focusRequesters[4]),
-                    nextFocusRequester = focusRequesters[0]
+                    previousFocusRequester = focusRequesters[3],
+                    nextFocusRequester = nextFocusRequester ?: focusRequesters[0]
                 )
             }
         }

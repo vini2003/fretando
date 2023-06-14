@@ -28,24 +28,29 @@ fun Paginator(
     total: Int,
     currentPage: Int,
     onSelectedPage: (Int) -> Unit,
-    onRefresh: () -> Unit, // listener for the refresh button
+    onRefresh: () -> Unit,
 ) {
     val ButtonWidth = 40.dp
-    val ArrowWidth = 48.dp // estimate, depends on your layout
-    val RefreshWidth = 48.dp // estimate, depends on your layout
-    val SpaceWidth = 8.dp // estimate, depends on your layout
+    val ArrowWidth = 48.dp
+    val RefreshWidth = 48.dp
+    val SpaceWidth = 8.dp
 
     BoxWithConstraints {
         val maxWidth = with(LocalDensity.current) { constraints.maxWidth.toDp() }
 
-        // Added RefreshWidth + SpaceWidth to the calculation to adjust for the refresh button
-        // TODO: Investigate div by zero!
-        val maxButtons = min(
-            10,
-            ((maxWidth - 2 * ArrowWidth - 2 * RefreshWidth - 5 * SpaceWidth) / (ButtonWidth + SpaceWidth)).toInt()
-        )
-        val showArrows10 = maxWidth >= 2 * ArrowWidth + 2 * SpaceWidth + 10 * (ButtonWidth + SpaceWidth)
-        val showArrows1 = maxWidth >= 2 * ArrowWidth + 2 * SpaceWidth + 2 * (ButtonWidth + SpaceWidth)
+        val denominator = (ButtonWidth + SpaceWidth)
+
+        val maxButtons = if (denominator != 0.dp) {
+            min(
+                10,
+                ((maxWidth - 2 * ArrowWidth - 2 * RefreshWidth - 5 * SpaceWidth) / denominator).toInt()
+            )
+        } else {
+            10
+        }
+
+        val showArrows10 = maxWidth >= 2 * ArrowWidth + 2 * SpaceWidth + 10 * denominator
+        val showArrows1 = maxWidth >= 2 * ArrowWidth + 2 * SpaceWidth + 2 * denominator
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -76,7 +81,6 @@ fun Paginator(
                 }
             }
 
-            // Refresh button
             IconButton(onClick = onRefresh) {
                 Icon(
                     Icons.Filled.Refresh,
@@ -89,8 +93,10 @@ fun Paginator(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val startIndexIn10PageBlocks = currentPage / maxButtons * maxButtons
-                val endIndexIn10PageBlocks = min(startIndexIn10PageBlocks + maxButtons, total)
+                val safeMaxButtons = if (maxButtons != 0) maxButtons else 1
+
+                val startIndexIn10PageBlocks = currentPage / safeMaxButtons * safeMaxButtons
+                val endIndexIn10PageBlocks = min(startIndexIn10PageBlocks + safeMaxButtons, total)
 
                 for (i in startIndexIn10PageBlocks until endIndexIn10PageBlocks) {
                     val pageNumber = i + 1

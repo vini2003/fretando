@@ -8,7 +8,6 @@ import androidx.compose.runtime.MutableState
 @ExperimentalMaterial3Api
 @Composable
 fun MainContent(selectedMainContent: MutableState<@Composable () -> Unit>) {
-    // Your main app content here...
     Column {
         selectedMainContent.value()
     }

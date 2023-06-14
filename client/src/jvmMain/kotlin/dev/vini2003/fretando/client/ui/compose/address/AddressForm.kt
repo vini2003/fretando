@@ -38,9 +38,15 @@ import dev.vini2003.fretando.client.util.misc.Countries
 fun AddressForm(
     label: String = "Address",
     data: MutableState<AddressFormData> = remember { mutableStateOf(AddressFormData()) },
+    firstFocusRequester: FocusRequester? = null,
+    nextFocusRequester: FocusRequester? = null,
     modifier: Modifier = Modifier,
 ) {
-    val focusRequesters = remember { List(7) { FocusRequester() } }
+    val focusRequesters = remember { MutableList(7) { FocusRequester() } }
+
+    if (firstFocusRequester != null) {
+        focusRequesters[0] = firstFocusRequester
+    }
 
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
     var dropdownMenuTextFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -82,6 +88,7 @@ fun AddressForm(
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(440.dp)
                         .focusRequester(focusRequesters[0]),
+                    previousFocusRequester = focusRequesters[6],
                     nextFocusRequester = focusRequesters[1]
                 )
                 CustomTextField(
@@ -92,6 +99,7 @@ fun AddressForm(
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(120.dp)
                         .focusRequester(focusRequesters[1]),
+                    previousFocusRequester = focusRequesters[0],
                     nextFocusRequester = focusRequesters[2]
                 )
             }
@@ -108,6 +116,7 @@ fun AddressForm(
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(380.dp)
                         .focusRequester(focusRequesters[2]),
+                    previousFocusRequester = focusRequesters[1],
                     nextFocusRequester = focusRequesters[3]
                 )
 
@@ -119,6 +128,7 @@ fun AddressForm(
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(180.dp)
                         .focusRequester(focusRequesters[3]),
+                    previousFocusRequester = focusRequesters[2],
                     nextFocusRequester = focusRequesters[4]
                 )
             }
@@ -135,6 +145,7 @@ fun AddressForm(
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(278.dp)
                         .focusRequester(focusRequesters[4]),
+                    previousFocusRequester = focusRequesters[3],
                     nextFocusRequester = focusRequesters[5]
                 )
 
@@ -151,7 +162,12 @@ fun AddressForm(
                             .focusRequester(focusRequesters[5])
                             .onPreviewKeyEvent { keyEvent ->
                                 if (keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyDown) {
-                                    focusRequesters[6].requestFocus()
+                                    if (keyEvent.isShiftPressed) {
+                                        focusRequesters[4].requestFocus()
+                                    } else {
+                                        focusRequesters[6].requestFocus()
+                                    }
+
                                     true
                                 } else {
                                     false
@@ -212,7 +228,8 @@ fun AddressForm(
                         .defaultMinSize(minHeight = MaterialTheme.sizes.medium)
                         .width(568.dp)
                         .focusRequester(focusRequesters[6]),
-                    nextFocusRequester = focusRequesters[0]
+                    previousFocusRequester = focusRequesters[5],
+                    nextFocusRequester = nextFocusRequester ?: focusRequesters[0]
                 )
             }
         }

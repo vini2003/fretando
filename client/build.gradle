@@ -1,21 +1,31 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    id "java" apply true
-    id "org.jetbrains.kotlin.multiplatform" apply true
-    id "org.jetbrains.compose" apply true
+    // Java
+    id "java"
+
+    // Kotlin Multiplatform
+    id "org.jetbrains.kotlin.multiplatform"
+
+    // Jetpack Compose
+    id "org.jetbrains.compose"
 }
 
+// Use Java 11.
+// Kotlin does not support Java 20 yet.
 sourceCompatibility = 11
 targetCompatibility = 11
 
 repositories {
+    // Google
     google()
 
+    // Maven Central
     mavenCentral()
 
+    // Jetpack Compose
     maven {
-        name = "JetBrains Compose"
+        name = "Jetpack Compose"
         url = "https://maven.pkg.jetbrains.space/public/p/compose/dev"
     }
 }
@@ -28,31 +38,33 @@ kotlin {
     sourceSets {
         jvmMain {
             dependencies {
+                // Common
                 implementation(project(":common"))
 
+                // Compose
                 implementation(compose.desktop.currentOs) {
+                    // Exclude outdated Material 2 library.
                     exclude group: "com.google.android.material", module: "material"
                     exclude group: "org.jetbrains.compose.material", module: "material-desktop"
                 }
 
-                implementation("org.jetbrains.compose.material:material-icons-extended:${composeVersion}")
+                // Material Icons Extended
+                implementation("org.jetbrains.compose.material:material-icons-extended:${jetpackComposeVersion}")
 
+                // Ktor Client Core
                 implementation("io.ktor:ktor-client-core:${ktorVersion}")
+
+                // Ktor Client Content Negotiation
                 implementation("io.ktor:ktor-client-content-negotiation:${ktorVersion}")
+
+                // Ktor Client Serialization GSON
                 implementation("io.ktor:ktor-serialization-gson:${ktorVersion}")
+
+                // Ktor Client CIO
                 implementation("io.ktor:ktor-client-cio:${ktorVersion}")
 
-                implementation("com.squareup.moshi:moshi:${moshiVersion}")
-
-                implementation("io.ktor:ktor-client-core:${ktorVersion}")
-
+                // Material 3
                 implementation(compose.material3)
-            }
-        }
-
-        jvmTest {
-            dependencies {
-                implementation(kotlin("test"))
             }
         }
     }
@@ -60,22 +72,32 @@ kotlin {
 
 compose.desktop {
     application {
+        // The application's entrypoint, where the first @Composable is defined.
         mainClass = "dev.vini2003.fretando.client.MainKt"
 
         nativeDistributions {
+            // Extra modules required at runtime for packaging.
             modules("java.instrument", "java.management", "java.prefs", "java.sql", "jdk.unsupported")
 
+            // Support DMG for MacOS, MSI for Windows and Deb for Linux.
             targetFormats = [TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb]
 
             packageName = "Fretando"
             packageVersion = "1.0.0"
 
+            // The icon file to use for the application.
+
+            // MacOS
             macOS {
                 iconFile.set(project.file("icon.icns"))
             }
+
+            // Windows
             windows {
                 iconFile.set(project.file("icon.ico"))
             }
+
+            // Linux
             linux {
                 iconFile.set(project.file("icon.png"))
             }
