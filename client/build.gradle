@@ -60,7 +60,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "dev.vini2003.fretando.client.MainKt"
 
         nativeDistributions {
             modules("java.instrument", "java.management", "java.prefs", "java.sql", "jdk.unsupported")
